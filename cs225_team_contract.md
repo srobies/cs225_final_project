@@ -20,5 +20,5 @@
    In the case of any disagreements, we will make a decision on the issue using a simple majority vote. If a team member’s schedule changes, we will discuss as a group to find a new time to meet that works with everyone’s schedules in order to avoid the issue of meeting without all members of the team. Unless there are special circumstances, we will expect all members to adhere to the day and time we agreed on, which was mentioned previously. If we run into any recurring issues, we will consult the mentor for our project and course staff for assistance.
 
 Spencer Robieson April 08, 2021
-
-Matthew Weiler 08 April 2021 mweiler3
+Matthew Weiler 08 April 2021
+Rachel Dannhausen-Brun racheld3 April 08, 2021
