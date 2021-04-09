@@ -52,7 +52,7 @@ Airport Importance: Girvan-Newman Algorithm
     centrality
 -   Betweenness of vertex v is number of times v appears in the shortest
     path between s,t, for all s,t, in V(G)
--   Time Efficiency: O(E^(2)\*N)
+-   Time Efficiency: O(E<sup>2</sup> \*N)
 
 Shortest Path: Dijkstra’s Algorithm
 
@@ -61,7 +61,7 @@ Shortest Path: Dijkstra’s Algorithm
 -   Input : source airport ID and destination airport ID
 -   Output: Vector storing route or collection of routes that make up
     shortest path from source to destination
--   Time Efficiency: O(V + Elog(V)) (w/ min-priority queue)
+-   Time Efficiency: O(V + E\*log(V)) (w/ min-priority queue)
 
 4. **Timeline**
 
