@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <map>
+#include <algorithm>
 
 #include "AirportsData.h"
 
@@ -16,7 +17,7 @@ using namespace std;
 AirportsData::AirportsData() {
   // maps each airport code to an index & map each airport code to airport name
   ifstream file_airports;
-  file_airports.open("airports.dat.txt");
+  file_airports.open("data/airports.csv");
   string line_airports;
   // stores number of lines
   int line_num = 0;
@@ -28,11 +29,15 @@ AirportsData::AirportsData() {
       getline(stream,substring,',');
       result.push_back(substring);
     }
-    string code_ = result[4];
-    string name_ = result[1];
-    airport_index_.insert(pair<string, int>(code_,line_num));
-    airport_names_.insert(pair<string, string>(code_,name_));
-    line_num++;
+
+    // throw entries with null data out
+    if(find(result.begin(), result.end(), "\\N") == result.end()) {
+      string code_ = result[4];
+      string name_ = result[1];
+      airport_index_.insert(pair<string, int>(code_,line_num));
+      airport_names_.insert(pair<string, string>(code_,name_));
+      line_num++;
+    }
   }
   file_airports.close();
 
@@ -46,7 +51,7 @@ AirportsData::AirportsData() {
   adjacency_matrix_ = vec;
 
   ifstream file_routes;
-  file_routes.open("routes.dat.txt");
+  file_routes.open("data/routes.csv");
   string line_routes;
   while (getline(file_routes,line_routes)) {
     vector<string> result;
