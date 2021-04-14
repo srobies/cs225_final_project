@@ -30,20 +30,20 @@ AirportsData::AirportsData() {
     }
     string code_ = result[4];
     string name_ = result[1];
-    airport_index.insert(pair<string, int>(code_,line_num));
-    airport_names.insert(pair<string, string>(code_,name_));
+    airport_index_.insert(pair<string, int>(code_,line_num));
+    airport_names_.insert(pair<string, string>(code_,name_));
     line_num++;
   }
   file_airports.close();
 
   // at this point, line_num is one bigger than what it should be
-  int line_num1 = line_num - 1;
+  line_num -= 1;
 
   // construct adjacency matrix but do not fill yet
-  vector<vector<int> > vec(line_num1, vector<int>(line_num1, 0));
+  vector<vector<int>> vec(line_num, vector<int>(line_num, 0));
 
-  // store matrix of 0s in adjacency_matrix
-  adjacency_matrix = vec;
+  // store matrix of 0s in adjacency_matrix_
+  adjacency_matrix_ = vec;
 
   ifstream file_routes;
   file_routes.open("routes.dat.txt");
@@ -56,21 +56,21 @@ AirportsData::AirportsData() {
       getline(stream,substring,',');
       result.push_back(substring);
     }
-    string start_ = result[2];
-    string end_ = result[4];
-    int index_start = airport_index[start_];
-    int index_end = airport_index[end_];
+    string start = result[2];
+    string end = result[4];
+    int index_start = airport_index_[start];
+    int index_end = airport_index_[end];
 
-    adjacency_matrix[index_start][index_end] = 1;
+    adjacency_matrix_[index_start][index_end] = 1;
   }
   file_routes.close();
 }
 
 std::vector< std::vector<int> > AirportsData::getMatrix() {
-  return adjacency_matrix;
+  return adjacency_matrix_;
 }
 std::map<std::string, std::string> AirportsData::getMap() {
-  return airport_names;
+  return airport_names_;
 }
 
 /**
@@ -81,11 +81,11 @@ std::map<std::string, std::string> AirportsData::getMap() {
 std::string AirportsData::getAirportName(std::string airport_code) {
   // iterate through the map
   // if key not in map, return "Airport Does Not Exist."
-  if (airport_names.find(airport_code) == airport_names.end()) {
+  if (airport_names_.find(airport_code) == airport_names_.end()) {
     return "Airport Does Not Exist.";
   } else {
     // if key is in the map, return the name of the aiport
-    return airport_names.at(airport_code);
+    return airport_names_.at(airport_code);
   }
 }
 
@@ -97,10 +97,10 @@ std::string AirportsData::getAirportName(std::string airport_code) {
 int AirportsData::getAirportIndex(std::string airport_code) {
   // iterate through the map
   // if key not in map, return -1
-  if (airport_index.find(airport_code) == airport_index.end()) {
+  if (airport_index_.find(airport_code) == airport_index_.end()) {
     return -1;
   } else {
     // if key is in the map, return the index of the aiport
-    return airport_index.at(airport_code);
+    return airport_index_.at(airport_code);
   }
 }
