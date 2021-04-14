@@ -26,12 +26,12 @@ public:
 
 private:
   // adjacency matrix for storing connections between airports
-  std::vector< std::vector<int> > adjacency_matrix;
+  std::vector<std::vector<int>> adjacency_matrix_;
 
   // map for finding index in vector each airport corresponds to using airport code
-  std::map<std::string, int> airport_index;
+  std::map<std::string, int> airport_index_;
 
   // map storing airport codes and their names
   // map<airport_code, airport_name>
-  std::map<std::string, std::string> airport_names;
+  std::map<std::string, std::string> airport_names_;
 };
