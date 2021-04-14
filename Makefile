@@ -1,7 +1,8 @@
-CC = clang++
-
-# Executable names
 EXE = main
 TEST = test
 
-WARNINGS = -pedantic -Wall -Werror -Wfatal-errors -Wextra -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function
+EXE_OBJ = main.o
+OBJS = main.o AirportsData.o 
+OBJS += $(CPP_FILES:.cpp=.o)
+
+include cs225/make/cs225.mk
