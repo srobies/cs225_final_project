@@ -41,7 +41,7 @@ AirportsData::AirportsData() {
   line_num -= 1;
 
   // construct adjacency matrix but do not fill yet
-  vector<vector<int>> vec(line_num, vector<int>(line_num, 0));
+  vector<vector<int> > vec(line_num, vector<int>(line_num, 0));
 
   // store matrix of 0s in adjacency_matrix_
   adjacency_matrix_ = vec;
