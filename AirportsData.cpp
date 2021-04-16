@@ -29,15 +29,11 @@ AirportsData::AirportsData() {
       getline(stream,substring,',');
       result.push_back(substring);
     }
-
-    // throw entries with null data out
-    if(find(result.begin(), result.end(), "\\N") == result.end()) {
-      string code_ = result[4];
-      string name_ = result[1];
-      airport_index_.insert(pair<string, int>(code_,line_num));
-      airport_names_.insert(pair<string, string>(code_,name_));
-      line_num++;
-    }
+    string code_ = result[4];
+    string name_ = result[1];
+    airport_index_.insert(pair<string, int>(code_,line_num));
+    airport_names_.insert(pair<string, string>(code_,name_));
+    line_num++;
   }
   file_airports.close();
 
@@ -61,12 +57,14 @@ AirportsData::AirportsData() {
       getline(stream,substring,',');
       result.push_back(substring);
     }
-    string start = result[2];
-    string end = result[4];
-    int index_start = airport_index_[start];
-    int index_end = airport_index_[end];
-
-    adjacency_matrix_[index_start][index_end] = 1;
+    // throw entries with null data out
+    if(find(result.begin(), result.end(), "\\N") == result.end()) {
+      string start = result[2];
+      string end = result[4];
+      int index_start = airport_index_[start];
+      int index_end = airport_index_[end];
+      adjacency_matrix_[index_start][index_end] = 1;
+    }
   }
   file_routes.close();
 }
