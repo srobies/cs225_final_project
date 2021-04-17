@@ -29,11 +29,18 @@ AirportsData::AirportsData() {
       getline(stream,substring,',');
       result.push_back(substring);
     }
-    string code_ = result[4];
-    string name_ = result[1];
-    airport_index_.insert(pair<string, int>(code_,line_num));
-    airport_names_.insert(pair<string, string>(code_,name_));
-    line_num++;
+    string code = result[4];
+    string name = result[1];
+    // throw entries out if code or name are null
+    if(find(code.begin(), code.end(), "\\N") == code.end() 
+        && find(name.begin(), name.end(), "\\N") == name.end()) {
+    // Need to handle quotes from data file
+      code = code.substr(1, code.size()-2);
+      name = name.substr(1, name.size()-2);
+      airport_index_.insert(pair<string, int>(code,line_num));
+      airport_names_.insert(pair<string, string>(code,name));
+      line_num++;
+    }
   }
   file_airports.close();
 
@@ -57,14 +64,13 @@ AirportsData::AirportsData() {
       getline(stream,substring,',');
       result.push_back(substring);
     }
-    // throw entries with null data out
-    if(find(result.begin(), result.end(), "\\N") == result.end()) {
-      string start = result[2];
-      string end = result[4];
-      int index_start = airport_index_[start];
-      int index_end = airport_index_[end];
-      adjacency_matrix_[index_start][index_end] = 1;
-    }
+    string start = result[2];
+    string end = result[4];
+    int index_start = airport_index_[start];
+    int index_end = airport_index_[end];
+    // int index_start = getAirportIndex(start);
+    // int index_end = getAirportIndex(end);
+    adjacency_matrix_[index_start][index_end] = 1;
   }
   file_routes.close();
 }
