@@ -2,32 +2,40 @@
 #include <vector>
 #include "../cs225/catch/catch.hpp"
 #include "../AirportsData.h"
+#include "../Graph.h"
 
-TEST_CASE("Verify contents of adjacency matrix") {
-  AirportsData *test = new AirportsData();
-  // print contents of adjacency matrix, but only the first entry is a 1 and everything else is 0
-  for (int i = 0; i < 4; i++) {
-    for (int j = 0; j < 4; j++) {
-      std::cout << test->getMatrix()[i][j] << endl;
-    }
+TEST_CASE("Check for self-loops") {
+  AirportsData test = AirportsData();
+  // an entry shouldn't have a connection with itself. Unless you're PKN apparently
+  auto matrix = test.getMatrix();
+  for(size_t i = 0; i < matrix.size(); i++) {
+    if(i != 3090)
+      REQUIRE(0 == matrix[i][i]);
   }
-  // an entry should have a connection with itself
-  REQUIRE(1 == getMatrix()[1][1]);
 }
 
 TEST_CASE("Verify that getAirportName returns airport name given airport code") {
-  AirportsData *test = new AirportsData();
-  std::string name = test->getAirportName("GKA");
+  AirportsData test = AirportsData();
+  std::string name = test.getAirportName("GKA");
   REQUIRE("Goroka Airport" == name);
+
+  std::string test2_name = test.getAirportName("MNH");
+  REQUIRE("Rustaq Airport" == test2_name); 
+
+  std::string test3_name = test.getAirportName("VHZ");
+  REQUIRE("Vahitahi Airport" == test3_name);
 }
 
 TEST_CASE("Verify that getAirportIndex returns airport index given airport code") {
-  AirportsData *test = new AirportsData();
   // first airport in airports.csv
-  int GKA_index = test->getAirportIndex("GKA");
+  AirportsData test = AirportsData();
+  int GKA_index = test.getAirportIndex("GKA");
   REQUIRE(0 == GKA_index);
 
   // second airport in airports.csv
-  int MAG_index = test->getAirportIndex("MAG");
+  int MAG_index = test.getAirportIndex("MAG");
   REQUIRE(1 == MAG_index);
+
+  int YAM_index = test.getAirportIndex("YAM");
+  REQUIRE(20 == YAM_index);
 }
