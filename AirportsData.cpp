@@ -29,11 +29,10 @@ AirportsData::AirportsData() {
       getline(stream,substring,',');
       result.push_back(substring);
     }
-    string code = result[4];
+    string code = result[4]; // using 3 letter IATA codes
     string name = result[1];
     // throw entries out if code or name are null
-    if(find(code.begin(), code.end(), "\\N") == code.end() 
-        && find(name.begin(), name.end(), "\\N") == name.end()) {
+    if(code.find("\\N") == string::npos && name.find("\\N") == string::npos) {
     // Need to handle quotes from data file
       code = code.substr(1, code.size()-2);
       name = name.substr(1, name.size()-2);
@@ -45,7 +44,7 @@ AirportsData::AirportsData() {
   file_airports.close();
 
   // at this point, line_num is one bigger than what it should be
-  line_num -= 1;
+  // line_num -= 1;
 
   // construct adjacency matrix but do not fill yet
   vector<vector<int> > vec(line_num, vector<int>(line_num, 0));
@@ -64,12 +63,11 @@ AirportsData::AirportsData() {
       getline(stream,substring,',');
       result.push_back(substring);
     }
-    string start = result[2];
+    string start = result[2]; // using 3 letter IATA codes
     string end = result[4];
-    int index_start = airport_index_[start];
-    int index_end = airport_index_[end];
-    // int index_start = getAirportIndex(start);
-    // int index_end = getAirportIndex(end);
+    int index_start = getAirportIndex(start);
+    int index_end = getAirportIndex(end);
+    if(index_start == -1 || index_end == -1) { continue; }
     adjacency_matrix_[index_start][index_end] = 1;
   }
   file_routes.close();
