@@ -165,9 +165,12 @@ void Graph::add_edge_(const int& src_node_ID, const int& dst_node_ID) {
     Node* v = nodes_[find_node_of_index_(dst_node_ID)];
     Node* z = nodes_[find_node_of_index_(src_node_ID)];
     // TODO: double check this comparison
-    if (std::none_of(z->neighbors.begin(), z->neighbors.end(), std::compare(v))) {
-        num_edges_ += 1;
-        z->neighbors.push_back(v);
+    // if (std::none_of(z->neighbors.begin(), z->neighbors.end(), [](Node* v){ return i == v; })) {
+    //     num_edges_ += 1;
+    //     z->neighbors.push_back(v);
+    // }
+    if(std::find(z->neighbors.begin(), z->neighbors.end(), v) == z->neighbors.end()) {
+      num_edges_ += 1;
+      z->neighbors.push_back(v);
     }
 }
-

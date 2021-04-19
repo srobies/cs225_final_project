@@ -24,6 +24,10 @@ TEST_CASE("Verify that getAirportName returns airport name given airport code") 
 
   std::string test3_name = test.getAirportName("VHZ");
   REQUIRE("Vahitahi Airport" == test3_name);
+
+  // test for non-existant code
+  std::string test4_name = test.getAirportName("ABECDEU");
+  REQUIRE("Airport Does Not Exist." == test4_name);
 }
 
 TEST_CASE("Verify that getAirportIndex returns airport index given airport code") {
