@@ -24,6 +24,8 @@ public:
   std::string getAirportName(std::string airport_code);
   int getAirportIndex(std::string airport_code);
   bool hasFlightBetween(std::string airport_src, std::string airport_dest);
+  int numIncomingFlights(std::string airport_code);
+  int numOutgoingFlights(std::string airport_code);
 
 private:
   // adjacency matrix for storing connections between airports
