@@ -128,3 +128,43 @@ bool AirportsData::hasFlightBetween(std::string airport_src, std::string airport
     return false;
   }
 }
+
+/**
+ * Count the number of incoming flights at an airport.
+ * 
+ * @param airport_code The code of the airport to count incoming flights for.
+ * @return The number of incoming flights at that airport.
+ */
+int AirportsData::numIncomingFlights(std::string airport_code) {
+  int num_flights = 0;
+  int size_airports = adjacency_matrix_[0].size();
+  int idx = getAirportIndex(airport_code);
+
+  for (int i = 0; i < size_airports; i++) {
+    if (adjacency_matrix_[i][idx]) {
+      num_flights++;
+    }
+  }
+
+  return num_flights;
+}
+
+/**
+ * Count the number of outgoing flights at an airport.
+ * 
+ * @param airport_code The code of the airport to count outgoing flights for.
+ * @return The number of outgoing flights at that airport.
+ */
+int AirportsData::numOutgoingFlights(std::string airport_code) {
+  int num_flights = 0;
+  int size_airports = adjacency_matrix_[0].size();
+  int idx = getAirportIndex(airport_code);
+
+  for (int i = 0; i < size_airports; i++) {
+    if (adjacency_matrix_[idx][i]) {
+      num_flights++;
+    }
+  }
+
+  return num_flights;
+}
