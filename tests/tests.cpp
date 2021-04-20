@@ -42,4 +42,23 @@ TEST_CASE("Verify that getAirportIndex returns airport index given airport code"
 
   int YAM_index = test.getAirportIndex("YAM");
   REQUIRE(20 == YAM_index);
+  
+  int INVALID_index = test.getAirportIndex("ZJA");
+  REQUIRE(-1 == INVALID_index);
+}
+
+TEST_CASE("Verify that hasFlightBetween correctly returns whether there is a flight from the source to the destination.") {
+  // first airport in airports.csv
+  AirportsData test = AirportsData();
+  bool connected1 = test.hasFlightBetween("AER", "KZN");
+  REQUIRE(true == connected1);
+
+  bool connected2 = test.hasFlightBetween("LAX", "YYZ");
+  REQUIRE(true == connected2);
+
+  bool connected3 = test.hasFlightBetween("TSA", "TTT");
+  REQUIRE(true == connected3);
+
+  bool connected4 = test.hasFlightBetween("ORD", "TTT");
+  REQUIRE(false == connected4);
 }
