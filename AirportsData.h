@@ -23,10 +23,11 @@ public:
   std::map<std::string, std::string> getMap();
   std::string getAirportName(std::string airport_code);
   int getAirportIndex(std::string airport_code);
+  bool hasFlightBetween(std::string airport_src, std::string airport_dest);
 
 private:
   // adjacency matrix for storing connections between airports
-  std::vector<std::vector<int>> adjacency_matrix_;
+  std::vector<std::vector<int> > adjacency_matrix_;
 
   // map for finding index in vector each airport corresponds to using airport code
   std::map<std::string, int> airport_index_;
