@@ -35,7 +35,7 @@ class Graph {
     Graph(const Graph& other);
     Graph& operator=(const Graph& other);
     ~Graph();
-    Node* get_node_addr(const int& node_index);
+    Node* get_node_ptr(const int& node_ID);
     void DFS();
 
   private:

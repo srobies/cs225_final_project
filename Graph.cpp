@@ -1,4 +1,3 @@
-#include <list>
 #include <iostream>
 #include <map>
 #include <vector>
@@ -92,9 +91,18 @@ Graph::~Graph() {
   nodes_.shrink_to_fit();
 }
 
-Node* Graph::get_node_addr(const int &node_index) {
+/**
+ * Check if the node has been created
+ * @param node_ID the index of the airport in the adjacency matrix
+ */
+Node* Graph::get_node_ptr(const int &node_ID) {
+  size_t ID = node_ID;
+  if(ID < nodes_.size()) {
+    return nodes_[node_ID]; // node_ID and index in nodes_ matchup
+  }
   return nullptr; // can't find node with that index
 }
+
 /**
  * Performs a recursive Depth First Traversal
  * @param v initial starting node index
@@ -166,8 +174,8 @@ void Graph::add_edge_(const int& src_node_ID, const int& dst_node_ID) {
 
     //Checks if the destination node is already included in the neighbors list, if 
     //it isn't it adds it and increases the number of edges by 1.
-    Node* dst_node = nodes_[find_node_of_index_(dst_node_ID)];
-    Node* src_node = nodes_[find_node_of_index_(src_node_ID)];
+    Node* dst_node = nodes_[find_node_of_ID_(dst_node_ID)];
+    Node* src_node = nodes_[find_node_of_ID_(src_node_ID)];
     // TODO: double check this comparison
     // if (std::none_of(z->neighbors.begin(), z->neighbors.end(), [](Node* v){ return i == v; })) {
     //     num_edges_ += 1;
