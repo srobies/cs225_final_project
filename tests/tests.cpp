@@ -112,12 +112,31 @@ TEST_CASE("Graph test with a small adjacency matrix") {
   auto fourth_node_begin = fourth_node->neighbors.begin();
   auto fourth_node_end = fourth_node->neighbors.end();
 
+  // Connections
   REQUIRE(find(first_node_begin, first_node_end, second_node) != first_node_end);
+  // No connections
+  REQUIRE(find(first_node_begin, first_node_end, first_node) == first_node_end);
+  REQUIRE(find(first_node_begin, first_node_end, third_node) == first_node_end);
+  REQUIRE(find(first_node_begin, first_node_end, fourth_node) == first_node_end);
+ 
+  // Connections
   REQUIRE(find(second_node_begin, second_node_end, first_node) != second_node_end);
   REQUIRE(find(second_node_begin, second_node_end, third_node) != second_node_end);
+  // No connections
+  REQUIRE(find(second_node_begin, second_node_end, second_node) == second_node_end);
+  REQUIRE(find(second_node_begin, second_node_end, fourth_node) == second_node_end);
+
+  // Connections
   REQUIRE(find(third_node_begin, third_node_end, second_node) != third_node_end);
   REQUIRE(find(third_node_begin, third_node_end, fourth_node) != third_node_end);
+  // No connections
+  REQUIRE(find(third_node_begin, third_node_end, first_node) == third_node_end);
+  REQUIRE(find(third_node_begin, third_node_end, third_node) == third_node_end);
+
+  // Connections
   REQUIRE(find(fourth_node_begin, fourth_node_end, first_node) != fourth_node_end);
   REQUIRE(find(fourth_node_begin, fourth_node_end, second_node) != fourth_node_end);
   REQUIRE(find(fourth_node_begin, fourth_node_end, third_node) != fourth_node_end);
+  // No connections
+  REQUIRE(find(fourth_node_begin, fourth_node_end, fourth_node) == fourth_node_end);
 }
