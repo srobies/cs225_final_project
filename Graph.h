@@ -13,9 +13,10 @@ using namespace std;
 
 struct Node {
     //node variables
-    int ID;
-    vector<struct Node*> neighbors;
-    int index;
+    // int ID; 
+    vector<struct Node*> neighbors; // marks outgoing flights as neighbors
+    // incoming flights not marked
+    int index; // row index in adjacency matrix. Can be used to identify node
 
     //node constructor
     Node(int index) : index(index) {}
@@ -42,9 +43,11 @@ class Graph {
     bool contains_node_(const int& ID);
     bool check_node_exists_(const int& ID);
     int find_node_of_index_(const int& node_index);
-    int find_node_of_ID_(const int& ID);
+    // int find_node_of_ID_(const int& ID);
 
     int num_edges_;
     int num_nodes_;
     vector<struct Node*> nodes_;
+    // visited vector for DFS
+    vector<vector<bool>> visited_;
 };
