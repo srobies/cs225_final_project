@@ -111,3 +111,20 @@ int AirportsData::getAirportIndex(std::string airport_code) {
     return airport_index_.at(airport_code);
   }
 }
+
+/**
+ * Check if an airport has a connection to another airport.
+ * 
+ * @param airport_src The string representing the source airport code.
+ * @param airport_dest The string representing the destination airport code.
+ * @return Whether or not there is a flight from the source airport to the destination airport.
+ */
+bool AirportsData::hasFlightBetween(std::string airport_src, std::string airport_dest) {
+  int source = getAirportIndex(airport_src);
+  int dest = getAirportIndex(airport_dest);
+  if(adjacency_matrix_[source][dest] == 1) {
+    return true;
+  } else {
+    return false;
+  }
+}
