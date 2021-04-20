@@ -13,13 +13,13 @@ using namespace std;
 
 struct Node {
     //node variables
-    // int ID; 
+    int ID; // row index in adjacency matrix. Can be used to identify node
     vector<struct Node*> neighbors; // marks outgoing flights as neighbors
     // incoming flights not marked
-    int index; // row index in adjacency matrix. Can be used to identify node
+    int index; // index in nodes_ private variable
 
     //node constructor
-    Node(int index) : index(index) {}
+    Node(int index) : ID(index) {}
 };
 
 /**
@@ -35,6 +35,7 @@ class Graph {
     Graph(const Graph& other);
     Graph& operator=(const Graph& other);
     ~Graph();
+    Node* get_node_addr(const int& node_index);
     void DFS();
 
   private:
@@ -43,7 +44,7 @@ class Graph {
     bool contains_node_(const int& ID);
     bool check_node_exists_(const int& ID);
     int find_node_of_index_(const int& node_index);
-    // int find_node_of_ID_(const int& ID);
+    int find_node_of_ID_(const int& ID);
 
     int num_edges_;
     int num_nodes_;

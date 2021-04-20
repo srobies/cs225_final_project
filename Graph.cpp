@@ -92,6 +92,9 @@ Graph::~Graph() {
   nodes_.shrink_to_fit();
 }
 
+Node* Graph::get_node_addr(const int &node_index) {
+  return nullptr; // can't find node with that index
+}
 /**
  * Performs a recursive Depth First Traversal
  * @param v initial starting node index
@@ -102,11 +105,11 @@ void DFS(const int& v) {
 
 /**
  * Check if the node has been created
- * @param node_ID the ID of the node you want to check for
+ * @param node_idx the index of the node you want to check for
  */
-bool Graph::check_node_exists_(const int& node_idx) {
+bool Graph::check_node_exists_(const int& node_ID) {
     for (Node* v: nodes_) {
-        if (v->index == node_idx) return true;
+        if (v->ID == node_ID) return true;
     }
     return false;
 }
@@ -115,11 +118,11 @@ bool Graph::check_node_exists_(const int& node_idx) {
  * Adds a node to the graph
  * @param node_idx the index of the node you want to add
  */
-void Graph::add_node_(const int& node_idx) {
-    if (check_node_exists_(node_idx)) return;
+void Graph::add_node_(const int& node_ID) {
+    if (check_node_exists_(node_ID)) return;
     num_nodes_ += 1;
     Node *v;
-    v = new Node(node_idx);
+    v = new Node(node_ID);
     nodes_.push_back(v);
 }
 
@@ -128,24 +131,24 @@ void Graph::add_node_(const int& node_idx) {
  * you want
  * @param node_ID the ID of the node you are looking for
  */
-// int Graph::find_node_of_ID_(const int& node_ID) {
-//     int i = 0;
-//     for (Node* v: nodes_) {
-//         if(v->ID == node_ID) return i;
-//         i += 1;
-//     }
-//     throw runtime_error {"Could not find node"};
-// }
+int Graph::find_node_of_ID_(const int& node_ID) {
+    int i = 0;
+    for (Node* v: nodes_) {
+        if(v->ID == node_ID) return i;
+        i += 1;
+    }
+    throw runtime_error {"Could not find node"};
+}
 
 /**
  * Returns the index in the list of nodes of the node with the node ID 
  * you want
  * @param node_ID the ID of the node you are looking for
  */
-int Graph::find_node_of_index_(const int& node_index) {
+int Graph::find_node_of_index_(const int& node_idx) {
     int i = 0;
     for (Node* v: nodes_) {
-        if(v->index == node_index) return i;
+        if(v->index == node_idx) return i;
         i += 1;
     }
     throw runtime_error {"Could not find node"};
@@ -156,15 +159,15 @@ int Graph::find_node_of_index_(const int& node_index) {
  * @param src_node_ID the ID of the tail end node of the edge
  * @param dst_node_ID the ID of the tip end node of the edge
  */
-void Graph::add_edge_(const int& src_node_idx, const int& dst_node_idx) {
+void Graph::add_edge_(const int& src_node_ID, const int& dst_node_ID) {
     //Check if nodes exist
-    if (!check_node_exists_(src_node_idx)) throw runtime_error {"Source node does not exist"};
-    if (!check_node_exists_(dst_node_idx)) throw runtime_error {"Destination node does not exist"};
+    if (!check_node_exists_(src_node_ID)) throw runtime_error {"Source node does not exist"};
+    if (!check_node_exists_(dst_node_ID)) throw runtime_error {"Destination node does not exist"};
 
     //Checks if the destination node is already included in the neighbors list, if 
     //it isn't it adds it and increases the number of edges by 1.
-    Node* dst_node = nodes_[find_node_of_index_(dst_node_idx)];
-    Node* src_node = nodes_[find_node_of_index_(src_node_idx)];
+    Node* dst_node = nodes_[find_node_of_index_(dst_node_ID)];
+    Node* src_node = nodes_[find_node_of_index_(src_node_ID)];
     // TODO: double check this comparison
     // if (std::none_of(z->neighbors.begin(), z->neighbors.end(), [](Node* v){ return i == v; })) {
     //     num_edges_ += 1;
