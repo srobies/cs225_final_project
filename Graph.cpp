@@ -12,7 +12,7 @@ using namespace std;
 
 /**
  * Class implementation of a graph. Creates a Graph class object
- * with a map of connect airports and routes. 
+ * with a map of connect airports and routes.
  */
 
 //Defaults Constructor
@@ -26,7 +26,7 @@ Graph::Graph() {
  * Copy constructor
  * @param other graph to be copied
  */
-Graph::Graph(const Graph& other) : num_edges_(other.num_edges_), 
+Graph::Graph(const Graph& other) : num_edges_(other.num_edges_),
   num_nodes_(other.num_nodes_) {
     for(Node* i: other.nodes_) {
       Node* copiedNode = new Node(i->index);
@@ -105,10 +105,59 @@ Node* Graph::get_node_ptr(const int &node_ID) {
 
 /**
  * Performs a recursive Depth First Traversal
- * @param v initial starting node index
+ * @param v initial starting node ID
  */
-void DFS(const int& v) {
-    
+ void Graph::DFS(const int& v) {
+  for (Graph::Iterator it = Graph::Iterator(this, v); *it != NULL; ++it) {
+    std::cout << *it;
+  }
+}
+
+/**
+ * Default iterator constructor.
+ */
+Graph::Iterator::Iterator() {
+  currentNodeID_ = 0;
+ }
+
+/**
+* Iterator constructor that takes in starting node ID.
+* @param start starting node
+*/
+Graph::Iterator::Iterator(Graph* graph, int startID) {
+  graph_ = graph;
+  startID_ = startID;
+  stack_.push(startID_);
+  // visited_ needs to be the same length as number of nodes in graph and all set to false
+}
+
+Graph::Iterator & Graph::Iterator::operator++() {
+  // Node* s = stack_.top();
+  // stack_.pop();
+  //
+  // while (visited[s]) {
+  //   s = stack_.top();
+  //   stack_.pop();
+  // }
+  //
+  // visited[s] = true;
+  //
+  // adjacent = //get aejacent to s
+  //
+  // for (node n: adjacent) {
+  //   if not(visited[n]) {
+  //     stack_.push(n);
+  //   }
+  // }
+  return *this;
+}
+
+Node* Graph::Iterator::operator*() {
+  return graph_->get_node_ptr(currentNodeID_);
+}
+
+bool Graph::Iterator::operator!=(const Iterator &other) {
+  return true;
 }
 
 /**
@@ -135,7 +184,7 @@ void Graph::add_node_(const int& node_ID) {
 }
 
 /**
- * Returns the index in the list of nodes of the node with the node ID 
+ * Returns the index in the list of nodes of the node with the node ID
  * you want
  * @param node_ID the ID of the node you are looking for
  */
@@ -149,7 +198,7 @@ int Graph::find_node_of_ID_(const int& node_ID) {
 }
 
 /**
- * Returns the index in the list of nodes of the node with the node ID 
+ * Returns the index in the list of nodes of the node with the node ID
  * you want
  * @param node_ID the ID of the node you are looking for
  */
@@ -172,7 +221,7 @@ void Graph::add_edge_(const int& src_node_ID, const int& dst_node_ID) {
     if (!check_node_exists_(src_node_ID)) throw runtime_error {"Source node does not exist"};
     if (!check_node_exists_(dst_node_ID)) throw runtime_error {"Destination node does not exist"};
 
-    //Checks if the destination node is already included in the neighbors list, if 
+    //Checks if the destination node is already included in the neighbors list, if
     //it isn't it adds it and increases the number of edges by 1.
     Node* dst_node = nodes_[find_node_of_ID_(dst_node_ID)];
     Node* src_node = nodes_[find_node_of_ID_(src_node_ID)];

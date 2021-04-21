@@ -8,6 +8,7 @@
 #include <vector>
 #include <iterator>
 #include <string>
+#include <stack>
 
 using namespace std;
 
@@ -36,7 +37,23 @@ class Graph {
     Graph& operator=(const Graph& other);
     ~Graph();
     Node* get_node_ptr(const int& node_ID);
-    void DFS();
+    void DFS(const int& v);
+
+    class Iterator : std::iterator<std::forward_iterator_tag, Node> {
+      public:
+        Iterator();
+
+        Iterator & operator++();
+        Node* operator*();
+        bool operator!=(const Iterator &other);
+        Iterator(Graph* graph, int startID);
+
+      private:
+        Graph* graph_;
+        int currentNodeID_;
+        std::stack<int> stack_;
+        int startID_;
+  };
 
   private:
     void add_edge_(const int& src_node_ID, const int& dst_node_ID);
