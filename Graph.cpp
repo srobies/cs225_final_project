@@ -121,34 +121,36 @@ Graph::Iterator::Iterator() {
  }
 
 /**
-* Iterator constructor that takes in starting node ID.
+* Iterator constructor that takes in a graph and starting node ID.
 * @param start starting node
 */
 Graph::Iterator::Iterator(Graph* graph, int startID) {
   graph_ = graph;
   startID_ = startID;
   stack_.push(startID_);
-  // visited_ needs to be the same length as number of nodes in graph and all set to false
+  visited_ = vector<bool>(graph->num_nodes_, false);
 }
 
 Graph::Iterator & Graph::Iterator::operator++() {
-  // Node* s = stack_.top();
-  // stack_.pop();
-  //
-  // while (visited[s]) {
-  //   s = stack_.top();
-  //   stack_.pop();
-  // }
-  //
-  // visited[s] = true;
-  //
-  // adjacent = //get aejacent to s
-  //
-  // for (node n: adjacent) {
-  //   if not(visited[n]) {
-  //     stack_.push(n);
-  //   }
-  // }
+  int s = stack_.top();
+  stack_.pop();
+
+  while (visited_[s]) {
+    s = stack_.top();
+    stack_.pop();
+  }
+
+  visited_[s] = true;
+
+  Node* cur_node = graph_->get_node_ptr(s);
+  std::vector<Node*> adjacent = cur_node->neighbors;
+
+  for (Node* n: adjacent) {
+    if (!visited_[n->ID]) {
+      stack_.push(n->ID);
+    }
+  }
+
   return *this;
 }
 

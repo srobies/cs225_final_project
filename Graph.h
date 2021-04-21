@@ -39,7 +39,7 @@ class Graph {
     Node* get_node_ptr(const int& node_ID);
     void DFS(const int& v);
 
-    class Iterator : std::iterator<std::forward_iterator_tag, Node> {
+    class Iterator : std::iterator<std::forward_iterator_tag, int> {
       public:
         Iterator();
 
@@ -53,6 +53,7 @@ class Graph {
         int currentNodeID_;
         std::stack<int> stack_;
         int startID_;
+        vector<bool> visited_;
   };
 
   private:
@@ -66,6 +67,4 @@ class Graph {
     int num_edges_;
     int num_nodes_;
     vector<struct Node*> nodes_;
-    // visited vector for DFS
-    vector<vector<bool>> visited_;
 };
