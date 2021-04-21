@@ -17,4 +17,5 @@ For this meeting, Spencer Robieson took notes. The leader for this meeting was R
 - Rachel: write code and tests for Dijkstra’s algorithm (with Spencer). General code review
 - Shayna: finish DFS and tests ASAP. Start looking into Girvan-Newman (with Matt). General code review
 - Matt: finish DFS and tests ASAP. Start looking into Girvan-Newman (with Shayna) General code review
+
 For the node implementation, it is not necessary to store ingoing flights or the airport code. The node will only store the outgoing flights in its vector. The code for the airport can be accessed using the index for the node.
