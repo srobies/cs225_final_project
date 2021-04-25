@@ -32,12 +32,13 @@ struct Node {
 class Graph {
   public:
     Graph();
-    Graph(vector<vector<int>> adjacencyMatrix);
+    Graph(vector<vector<int> > adjacencyMatrix);
     Graph(const Graph& other);
     Graph& operator=(const Graph& other);
     ~Graph();
     Node* get_node_ptr(const int& node_ID);
     void DFS(const int& v);
+    vector<int> Graph::dijkstras(const int& src_node_ID);
 
     class Iterator : std::iterator<std::forward_iterator_tag, int> {
       public:
