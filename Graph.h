@@ -64,7 +64,7 @@ class Graph {
     int find_node_of_index_(const int& node_index);
     int find_node_of_ID_(const int& ID);
 
-    int num_edges_;
-    int num_nodes_;
+    int num_edges_ = 0;
+    int num_nodes_ = 0;
     vector<struct Node*> nodes_;
 };
