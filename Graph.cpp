@@ -66,7 +66,7 @@ Graph& Graph::operator=(const Graph& other) {
  * Constructor that takes in an Adjacency matrix and produces the node graph
  * @param adjMat the adjacency matrix to be processed
  */
-Graph::Graph(vector<vector<int>> adjMat) {
+Graph::Graph(vector<vector<int> > adjMat) {
     //creates nodes
     for (size_t i = 0; i < adjMat.size(); i++) {
         add_node_(i);
@@ -236,4 +236,31 @@ void Graph::add_edge_(const int& src_node_ID, const int& dst_node_ID) {
       num_edges_ += 1;
       src_node->neighbors.push_back(dst_node);
     }
+}
+
+/**
+ * Dijkstra's Algorithm
+ * @param node_ID the ID of the node that is the source
+ */
+vector<int> Graph::dijkstras(const int& source_node_ID) {
+  // the number of nodes in the graph
+  int num_nodes = (int) nodes_.size();
+
+  // index of source
+  int source_idx = source_node_ID;
+
+  // create vector to store distance to each node
+  vector<int> dist_to_source(num_nodes);
+
+  // distance from source node to source node is 0
+  dist_to_source[source_idx] = 0;
+
+  // set all other distances to "infinity"
+  for (int i = 0; i < (int) dist_to_source.size(); i++) {
+    if (i != source_idx) {
+      dist_to_source[i] = 100000000;
+    }
+  }
+
+  return dist_to_source;
 }
