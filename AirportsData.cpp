@@ -12,7 +12,7 @@ using namespace std;
 
 /**
  * Constructs a new adjacency matrix and map to hold airport data.
- * 
+ *
  */
 AirportsData::AirportsData() {
   // maps each airport code to an index & map each airport code to airport name
@@ -82,7 +82,7 @@ std::map<std::string, std::string> AirportsData::getMap() {
 
 /**
  * Gets the name of an airport using the airport code
- * 
+ *
  * @param airport_code The string representing the airport code.
  */
 std::string AirportsData::getAirportName(std::string airport_code) {
@@ -98,7 +98,7 @@ std::string AirportsData::getAirportName(std::string airport_code) {
 
 /**
  * Gets the index of the airport in adjacency matrix using the airport code
- * 
+ *
  * @param airport_code The string representing the airport code.
  */
 int AirportsData::getAirportIndex(std::string airport_code) {
@@ -114,7 +114,7 @@ int AirportsData::getAirportIndex(std::string airport_code) {
 
 /**
  * Check if an airport has a connection to another airport.
- * 
+ *
  * @param airport_src The string representing the source airport code.
  * @param airport_dest The string representing the destination airport code.
  * @return Whether or not there is a flight from the source airport to the destination airport.
@@ -131,7 +131,7 @@ bool AirportsData::hasFlightBetween(std::string airport_src, std::string airport
 
 /**
  * Count the number of incoming flights at an airport.
- * 
+ *
  * @param airport_code The code of the airport to count incoming flights for.
  * @return The number of incoming flights at that airport.
  */
@@ -151,7 +151,7 @@ int AirportsData::numIncomingFlights(std::string airport_code) {
 
 /**
  * Count the number of outgoing flights at an airport.
- * 
+ *
  * @param airport_code The code of the airport to count outgoing flights for.
  * @return The number of outgoing flights at that airport.
  */
@@ -202,10 +202,10 @@ vector<int> AirportsData::dijkstras(int source_idx) {
   for (int count = 0; count < size_airports - 1; count++) {
     // pick minimum from airports not included
     int min = minFlightDistance(dist_to_source, predecessor);
-  
+
     // Mark this airport as having shortest distance updated
     predecessor[min] = true;
-  
+
     // Update distance value of the adjacent airports to chosen airport
     for (int i = 0; i < size_airports; i++) {
       // if airport not in predecessor set, and there is a connection,
@@ -229,20 +229,20 @@ vector<int> AirportsData::dijkstras(int source_idx) {
 
 int AirportsData::minFlightDistance(vector<int> dts, vector<bool> pred) {
   // initialize a minimum
-  int min = INT_MAX
+  int min = INT_MAX;
   int min_index = -50;
 
   int size_airports = adjacency_matrix_[0].size();
-  
+
   for (int i = 0; i < size_airports; i++) {
     // if the airport is not already connected
     if (pred[i] == false) {
       // if the distance is less than or equal to the min
       if (dts[i] <= min) {
-        min = dts[i]
+        min = dts[i];
         min_index = i;
       }
-    } 
+    }
   }
   return min_index;
 }

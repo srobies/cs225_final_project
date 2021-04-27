@@ -21,7 +21,7 @@ TEST_CASE("Verify that getAirportName returns airport name given airport code") 
   REQUIRE("Goroka Airport" == name);
 
   std::string test2_name = test.getAirportName("MNH");
-  REQUIRE("Rustaq Airport" == test2_name); 
+  REQUIRE("Rustaq Airport" == test2_name);
 
   std::string test3_name = test.getAirportName("VHZ");
   REQUIRE("Vahitahi Airport" == test3_name);
@@ -43,7 +43,7 @@ TEST_CASE("Verify that getAirportIndex returns airport index given airport code"
 
   int YAM_index = test.getAirportIndex("YAM");
   REQUIRE(20 == YAM_index);
-  
+
   int INVALID_index = test.getAirportIndex("ZJA");
   REQUIRE(-1 == INVALID_index);
 }
@@ -65,7 +65,7 @@ TEST_CASE("Verify that hasFlightBetween correctly returns whether there is a fli
 }
 
 TEST_CASE("Graph test with a small adjacency matrix") {
-  /* 
+  /*
    * [0, 1, 0, 0]
    * [1, 0, 1, 0]
    * [0, 1, 0, 1]
@@ -102,7 +102,7 @@ TEST_CASE("Graph test with a small adjacency matrix") {
   const Node* second_node = test_graph.get_node_ptr(1);
   const Node* third_node = test_graph.get_node_ptr(2);
   const Node* fourth_node = test_graph.get_node_ptr(3);
-  
+
   auto first_node_begin = first_node->neighbors.begin();
   auto first_node_end = first_node->neighbors.end();
   auto second_node_begin = second_node->neighbors.begin();
@@ -118,7 +118,7 @@ TEST_CASE("Graph test with a small adjacency matrix") {
   REQUIRE(find(first_node_begin, first_node_end, first_node) == first_node_end);
   REQUIRE(find(first_node_begin, first_node_end, third_node) == first_node_end);
   REQUIRE(find(first_node_begin, first_node_end, fourth_node) == first_node_end);
- 
+
   // Connections
   REQUIRE(find(second_node_begin, second_node_end, first_node) != second_node_end);
   REQUIRE(find(second_node_begin, second_node_end, third_node) != second_node_end);
@@ -139,4 +139,45 @@ TEST_CASE("Graph test with a small adjacency matrix") {
   REQUIRE(find(fourth_node_begin, fourth_node_end, third_node) != fourth_node_end);
   // No connections
   REQUIRE(find(fourth_node_begin, fourth_node_end, fourth_node) == fourth_node_end);
+}
+
+TEST_CASE("DFS test on graph") {
+  /*
+   * [0, 1, 0, 0]
+   * [1, 0, 1, 0]
+   * [0, 1, 0, 1]
+   * [1, 1, 1, 0]
+   */
+  vector<vector<int>> test_matrix;
+  // first row
+  int first_row[] = {0, 1, 0, 0};
+  vector<int> current_row;
+  for(int i: first_row)
+    current_row.push_back(i);
+  test_matrix.push_back(current_row);
+  // second row
+  current_row.clear();
+  int second_row[] = {1, 0, 1, 0};
+  for(int i: second_row)
+    current_row.push_back(i);
+  test_matrix.push_back(current_row);
+  // third row
+  current_row.clear();
+  int third_row[] = {0, 1, 0, 1};
+  for(int i: third_row)
+    current_row.push_back(i);
+  test_matrix.push_back(current_row);
+  // fourth row
+  current_row.clear();
+  int fourth_row[] = {1, 1, 1, 0};
+  for(int i: fourth_row)
+    current_row.push_back(i);
+  test_matrix.push_back(current_row);
+
+  // make graph from adjacency matrix
+  Graph test_graph = Graph(test_matrix);
+
+  // run DFS on test_graph starting with the node with ID 1
+  // currently prints out 1 1 2 3 0, need to find bug that's printing the starting node twice
+  test_graph.DFS(1);
 }
