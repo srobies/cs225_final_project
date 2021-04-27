@@ -2,6 +2,7 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <stack>
 
 #include "Graph.h"
 #include "AirportsData.h"
@@ -104,12 +105,12 @@ Node* Graph::get_node_ptr(const int &node_ID) {
 }
 
 /**
- * Performs a recursive Depth First Traversal
- * @param v initial starting node ID
+ * Performs an iterative Depth First Search
+ * @param start_node_ID initial starting node ID
  */
- void Graph::DFS(const int& v) {
-  for (Graph::Iterator it = Graph::Iterator(this, v); *it != NULL; ++it) {
-    std::cout << *it;
+ void Graph::DFS(int start_node_ID) {
+  for (auto it = Graph::Iterator(this, start_node_ID); it != Graph::Iterator(); ++it) {
+    std::cout << (*it)->ID << std::endl;
   }
 }
 
@@ -117,7 +118,7 @@ Node* Graph::get_node_ptr(const int &node_ID) {
  * Default iterator constructor.
  */
 Graph::Iterator::Iterator() {
-  currentNodeID_ = 0;
+  finished_ = true;
  }
 
 /**
@@ -127,16 +128,20 @@ Graph::Iterator::Iterator() {
 Graph::Iterator::Iterator(Graph* graph, int startID) {
   graph_ = graph;
   startID_ = startID;
+  currentNodeID_ = startID;
   stack_.push(startID_);
   visited_ = vector<bool>(graph->num_nodes_, false);
+  finished_ = false;
 }
 
 Graph::Iterator & Graph::Iterator::operator++() {
   int s = stack_.top();
+  currentNodeID_ = s;
   stack_.pop();
 
-  while (visited_[s]) {
+  while (visited_[s] && !stack_.empty()) {
     s = stack_.top();
+    currentNodeID_ = s;
     stack_.pop();
   }
 
@@ -150,6 +155,8 @@ Graph::Iterator & Graph::Iterator::operator++() {
       stack_.push(n->ID);
     }
   }
+  if(stack_.empty()) // If the stack is empty, there's no more nodes to traverse
+    finished_ = true;
 
   return *this;
 }
@@ -159,7 +166,11 @@ Node* Graph::Iterator::operator*() {
 }
 
 bool Graph::Iterator::operator!=(const Iterator &other) {
-  return true;
+  // if(currentNodeID_ != other.currentNodeID_ || finished_ != other.finished_)
+  // not sure about this comparison
+  if(finished_ != other.finished_)
+    return true;
+  return false;
 }
 
 /**

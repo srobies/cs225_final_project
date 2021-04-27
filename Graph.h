@@ -37,10 +37,10 @@ class Graph {
     Graph& operator=(const Graph& other);
     ~Graph();
     Node* get_node_ptr(const int& node_ID);
-    void DFS(const int& v);
-    vector<int> Graph::dijkstras(const int& src_node_ID);
+    vector<int> dijkstras(const int& src_node_ID);
+    void DFS(int start_node_ID);
 
-    class Iterator : std::iterator<std::forward_iterator_tag, int> {
+    class Iterator : std::iterator<std::forward_iterator_tag, Node> {
       public:
         Iterator();
 
@@ -55,6 +55,7 @@ class Graph {
         std::stack<int> stack_;
         int startID_;
         vector<bool> visited_;
+        bool finished_;
   };
 
   private:
