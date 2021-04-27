@@ -1,4 +1,4 @@
-CS 225 Data Structures {#h.n23cs9ft5t7w .c20}
+CS 225 Data Structures
 ----------------------
 
 Final Project Proposal (racheld3-slr6-mweiler3-provine2)
