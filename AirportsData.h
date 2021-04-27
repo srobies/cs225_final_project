@@ -26,6 +26,8 @@ public:
   bool hasFlightBetween(std::string airport_src, std::string airport_dest);
   int numIncomingFlights(std::string airport_code);
   int numOutgoingFlights(std::string airport_code);
+  vector<int> dijkstras(int source_idx);
+  int minFlightDistance(vector<int> dts, vector<bool> pred);
 
 private:
   // adjacency matrix for storing connections between airports
