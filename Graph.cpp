@@ -252,7 +252,6 @@ void Graph::add_edge_(const int& src_node_ID, const int& dst_node_ID) {
 /**
  * Dijkstra's Algorithm
  * @param node_ID the ID of the node that is the source
- */
 vector<int> Graph::dijkstras(const int& source_node_ID) {
   // the number of nodes in the graph
   int num_nodes = (int) nodes_.size();
@@ -275,3 +274,4 @@ vector<int> Graph::dijkstras(const int& source_node_ID) {
 
   return dist_to_source;
 }
+*/
