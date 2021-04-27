@@ -19,3 +19,6 @@ For this meeting, Spencer Robieson took notes. The leader for this meeting was R
 - Matt: finish DFS and tests ASAP. Start looking into Girvan-Newman (with Shayna) General code review
 
 For the node implementation, it is not necessary to store ingoing flights or the airport code. The node will only store the outgoing flights in its vector. The code for the airport can be accessed using the index for the node.
+
+**April 27, 2021:**
+For this meeting, Shayna Provine took notes. The leader for this meeting was Matt Weiler. The implementation of DFS is still in progress. Currently, out of 6000 nodes, only 3193 traverses are taking place. We will add tests for add_node_/check_node_exists_ (Matt) as well as tests for the iterator (Spencer) to debug. We have an implementation of Djikstra’s completed, with tests still needing to be written. We plan on having DFS and Djikstra’s debugged and verified with tests by Saturday. We are adding an additional meeting on Reading Day. By next week, Matt and Spencer will work on Graph/DFS tests and Rachel and Shayna will work on Djikstra’s.
