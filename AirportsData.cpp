@@ -112,6 +112,21 @@ int AirportsData::getAirportIndex(std::string airport_code) {
 }
 
 /**
+ * Gets the 3 letter code of the airport in adjacency matrix using index
+ *
+ * @param airport_idx The number representing the airport index.
+ */
+string AirportsData::getAirportCode(int airport_idx) {
+  // iterate through the map
+  for (auto& entry : airport_index_) {
+    if (entry.second == airport_idx) {
+      return entry.first;
+    }
+  }
+  return "Not a Valid Airport Index.";
+}
+
+/**
  * Check if an airport has a connection to another airport.
  *
  * @param airport_src The string representing the source airport code.
@@ -216,6 +231,7 @@ vector<int> AirportsData::dijkstras(int source_idx) {
           if (dist_to_source[min] != INT_MAX) {
             // check adding new distance is less than distance to this one
             if ((dist_to_source[min] + adjacency_matrix_[min][i]) < dist_to_source[i]) {
+              // add 1 flight to the distance
               dist_to_source[i] = dist_to_source[min] + 1;
             }
           }

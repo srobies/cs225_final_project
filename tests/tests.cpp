@@ -214,3 +214,24 @@ TEST_CASE("Dijkstra's Algorithm Test 2") {
   int test_jfk = test.getAirportIndex("JFK");
   REQUIRE(dijkstras_ohare[test_jfk] == 1);
 }
+
+TEST_CASE("Dijkstra's Algorithm Test 3") {
+  AirportsData test = AirportsData();
+  int champaign_idx = test.getAirportIndex("CMI");
+  vector<int> dijkstras_champaign = test.dijkstras(champaign_idx);
+
+  // the shortest path between the source and itself is 0
+  REQUIRE(dijkstras_champaign[champaign_idx] == 0);
+
+  // shortest path between CMI and ORD is 1 flight
+  int test_ord = test.getAirportIndex("ORD");
+  REQUIRE(dijkstras_champaign[test_ord] == 1);
+
+  // shortest path between CMI and AZO is 2 flights
+  int test_azo = test.getAirportIndex("AZO");
+  REQUIRE(dijkstras_champaign[test_azo] == 2);
+
+  // shortest path between CMI and YYZ is 2 flights
+  int test_yyz = test.getAirportIndex("YYZ");
+  REQUIRE(dijkstras_champaign[test_yyz] == 2);
+}
