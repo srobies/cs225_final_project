@@ -181,3 +181,36 @@ TEST_CASE("DFS test on graph") {
   // currently prints out 1 1 2 3 0, need to find bug that's printing the starting node twice
   test_graph.DFS(1);
 }
+
+TEST_CASE("Dijkstra's Algorithm Test 1") {
+  AirportsData test = AirportsData();
+  vector<int> dijkstras_goroka = test.dijkstras(0);
+
+  // the shortest path between the source and itself is 0
+  REQUIRE(dijkstras_goroka[0] == 0);
+
+  // shortest path between GKA and LAE is 1 flight
+  int test_lae = test.getAirportIndex("LAE");
+  REQUIRE(dijkstras_goroka[test_lae] == 1);
+
+  // shortest path between GKA and POM is 1 flight
+  int test_pom = test.getAirportIndex("POM");
+  REQUIRE(dijkstras_goroka[test_pom] == 1);
+}
+
+TEST_CASE("Dijkstra's Algorithm Test 2") {
+  AirportsData test = AirportsData();
+  int ohare_idx = test.getAirportIndex("ORD");
+  vector<int> dijkstras_ohare = test.dijkstras(ohare_idx);
+
+  // the shortest path between the source and itself is 0
+  REQUIRE(dijkstras_ohare[ohare_idx] == 0);
+
+  // shortest path between ORD and ATL is 1 flight
+  int test_atl = test.getAirportIndex("ATL");
+  REQUIRE(dijkstras_ohare[test_atl] == 1);
+
+  // shortest path between ORD and JFK is 1 flight
+  int test_jfk = test.getAirportIndex("JFK");
+  REQUIRE(dijkstras_ohare[test_jfk] == 1);
+}

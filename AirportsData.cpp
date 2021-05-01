@@ -12,7 +12,6 @@ using namespace std;
 
 /**
  * Constructs a new adjacency matrix and map to hold airport data.
- *
  */
 AirportsData::AirportsData() {
   // maps each airport code to an index & map each airport code to airport name
