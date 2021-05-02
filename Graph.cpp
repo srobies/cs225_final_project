@@ -127,11 +127,19 @@ Graph::Iterator::Iterator() {
 */
 Graph::Iterator::Iterator(Graph* graph, int startID) {
   graph_ = graph;
+  // Add neighbors of start node to stack
+  // NOTE: This is a mildly hacky way of doing it but the easiest off the top
+  // of my head
+  auto currentNode = graph_->get_node_ptr(startID);
+  auto neighbor = currentNode->neighbors;
+  for(size_t i = 0; i < neighbor.size(); i++) {
+    stack_.push(neighbor[i]->ID);
+  }
   startID_ = startID;
   currentNodeID_ = startID;
-  stack_.push(startID_);
   visited_ = vector<bool>(graph->num_nodes_, false);
   finished_ = false;
+  visited_[startID] = true;
 }
 
 Graph::Iterator & Graph::Iterator::operator++() {
