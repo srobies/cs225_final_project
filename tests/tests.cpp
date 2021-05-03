@@ -112,6 +112,12 @@ TEST_CASE("Graph test with a small adjacency matrix") {
   auto fourth_node_begin = fourth_node->neighbors.begin();
   auto fourth_node_end = fourth_node->neighbors.end();
 
+  const int numNodes = test_graph.get_num_nodes();
+  const int numEdges = test_graph.get_num_edges();
+
+  //Number of nodes and edges
+  REQUIRE(numNodes == 4);
+  REQUIRE(numEdges == 8);
   // Connections
   REQUIRE(find(first_node_begin, first_node_end, second_node) != first_node_end);
   // No connections
@@ -140,6 +146,10 @@ TEST_CASE("Graph test with a small adjacency matrix") {
   // No connections
   REQUIRE(find(fourth_node_begin, fourth_node_end, fourth_node) == fourth_node_end);
 }
+
+
+
+
 
 TEST_CASE("DFS test on graph") {
   /*
@@ -180,58 +190,4 @@ TEST_CASE("DFS test on graph") {
   // run DFS on test_graph starting with the node with ID 1
   // currently prints out 1 1 2 3 0, need to find bug that's printing the starting node twice
   test_graph.DFS(1);
-}
-
-TEST_CASE("Dijkstra's Algorithm Test 1") {
-  AirportsData test = AirportsData();
-  vector<int> dijkstras_goroka = test.dijkstras(0);
-
-  // the shortest path between the source and itself is 0
-  REQUIRE(dijkstras_goroka[0] == 0);
-
-  // shortest path between GKA and LAE is 1 flight
-  int test_lae = test.getAirportIndex("LAE");
-  REQUIRE(dijkstras_goroka[test_lae] == 1);
-
-  // shortest path between GKA and POM is 1 flight
-  int test_pom = test.getAirportIndex("POM");
-  REQUIRE(dijkstras_goroka[test_pom] == 1);
-}
-
-TEST_CASE("Dijkstra's Algorithm Test 2") {
-  AirportsData test = AirportsData();
-  int ohare_idx = test.getAirportIndex("ORD");
-  vector<int> dijkstras_ohare = test.dijkstras(ohare_idx);
-
-  // the shortest path between the source and itself is 0
-  REQUIRE(dijkstras_ohare[ohare_idx] == 0);
-
-  // shortest path between ORD and ATL is 1 flight
-  int test_atl = test.getAirportIndex("ATL");
-  REQUIRE(dijkstras_ohare[test_atl] == 1);
-
-  // shortest path between ORD and JFK is 1 flight
-  int test_jfk = test.getAirportIndex("JFK");
-  REQUIRE(dijkstras_ohare[test_jfk] == 1);
-}
-
-TEST_CASE("Dijkstra's Algorithm Test 3") {
-  AirportsData test = AirportsData();
-  int champaign_idx = test.getAirportIndex("CMI");
-  vector<int> dijkstras_champaign = test.dijkstras(champaign_idx);
-
-  // the shortest path between the source and itself is 0
-  REQUIRE(dijkstras_champaign[champaign_idx] == 0);
-
-  // shortest path between CMI and ORD is 1 flight
-  int test_ord = test.getAirportIndex("ORD");
-  REQUIRE(dijkstras_champaign[test_ord] == 1);
-
-  // shortest path between CMI and AZO is 2 flights
-  int test_azo = test.getAirportIndex("AZO");
-  REQUIRE(dijkstras_champaign[test_azo] == 2);
-
-  // shortest path between CMI and YYZ is 2 flights
-  int test_yyz = test.getAirportIndex("YYZ");
-  REQUIRE(dijkstras_champaign[test_yyz] == 2);
 }

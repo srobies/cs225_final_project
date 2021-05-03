@@ -93,6 +93,20 @@ Graph::~Graph() {
 }
 
 /**
+ * Returns the number of nodes in the graph
+ */
+int Graph::get_num_nodes() {
+  return num_nodes_;
+}
+
+/**
+ * Returns the number of edges in the graph
+ */
+int Graph::get_num_edges() {
+  return num_edges_;
+}
+
+/**
  * Check if the node has been created
  * @param node_ID the index of the airport in the adjacency matrix
  */

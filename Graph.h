@@ -37,6 +37,8 @@ class Graph {
     Graph& operator=(const Graph& other);
     ~Graph();
     Node* get_node_ptr(const int& node_ID);
+    int get_num_nodes();
+    int get_num_edges();
     // vector<int> dijkstras(const int& src_node_ID);
     void DFS(int start_node_ID);
 
