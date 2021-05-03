@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <climits>
 
 #include "AirportsData.h"
 
@@ -31,7 +32,7 @@ AirportsData::AirportsData() {
     string code = result[4]; // using 3 letter IATA codes
     string name = result[1];
     // throw entries out if code or name are null
-    if(code.find("\\N") == string::npos && name.find("\\N") == string::npos) {
+    if(code.find("\\N") == string::npos && name.find("\\N") == string::npos && code.size() == 5) {
     // Need to handle quotes from data file
       code = code.substr(1, code.size()-2);
       name = name.substr(1, name.size()-2);
@@ -41,6 +42,13 @@ AirportsData::AirportsData() {
     }
   }
   file_airports.close();
+
+  // for(auto it = airport_index_.begin(); it != airport_index_.end(); ++it) {
+  //   cout << it->first << " " << it->second << endl;
+  // }
+  // cout << "Airport_index_ size = " << airport_index_.size() << endl;
+  // cout << "Airport_names_ size = " << airport_names_.size() << endl;
+  // cout << line_num << endl;
 
   // at this point, line_num is one bigger than what it should be
   // line_num -= 1;
