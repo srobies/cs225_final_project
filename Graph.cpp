@@ -110,6 +110,12 @@ Node* Graph::get_node_ptr(const int &node_ID) {
 }
 
 /**
+ * Return the number of airports("nodes") in the graph
+ */
+int Graph::getNumberAirports() {
+  return num_nodes_;
+}
+/**
  * Check if a node has been visited
  * @param node_ID which node to check if visited
  */

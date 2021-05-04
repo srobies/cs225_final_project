@@ -33,17 +33,17 @@ TEST_CASE("Verify that getAirportName returns airport name given airport code") 
 }
 
 TEST_CASE("Verify that getAirportIndex returns airport index given airport code") {
-  // first airport in airports.csv
+  // Airports are inserted in alphabetical order
   AirportsData test = AirportsData();
-  int GKA_index = test.getAirportIndex("GKA");
-  REQUIRE(0 == GKA_index);
+  int AAE_index = test.getAirportIndex("AAE");
+  REQUIRE(0 == AAE_index);
 
   // second airport in airports.csv
   int MAG_index = test.getAirportIndex("MAG");
-  REQUIRE(1 == MAG_index);
+  REQUIRE(1663 == MAG_index);
 
   int YAM_index = test.getAirportIndex("YAM");
-  REQUIRE(20 == YAM_index);
+  REQUIRE(3005 == YAM_index);
 
   int INVALID_index = test.getAirportIndex("ZJA");
   REQUIRE(-1 == INVALID_index);
@@ -104,42 +104,80 @@ TEST_CASE("Graph test with a small adjacency matrix") {
   const Node* third_node = test_graph.get_node_ptr(2);
   const Node* fourth_node = test_graph.get_node_ptr(3);
 
-  auto first_node_begin = first_node->neighbors.begin();
-  auto first_node_end = first_node->neighbors.end();
-  auto second_node_begin = second_node->neighbors.begin();
-  auto second_node_end = second_node->neighbors.end();
-  auto third_node_begin = third_node->neighbors.begin();
-  auto third_node_end = third_node->neighbors.end();
-  auto fourth_node_begin = fourth_node->neighbors.begin();
-  auto fourth_node_end = fourth_node->neighbors.end();
+  auto first_node_begin = first_node->dest_nodes.begin();
+  auto first_node_end = first_node->dest_nodes.end();
+  auto second_node_begin = second_node->dest_nodes.begin();
+  auto second_node_end = second_node->dest_nodes.end();
+  auto third_node_begin = third_node->dest_nodes.begin();
+  auto third_node_end = third_node->dest_nodes.end();
+  auto fourth_node_begin = fourth_node->dest_nodes.begin();
+  auto fourth_node_end = fourth_node->dest_nodes.end();
 
-  // Connections
+  // Connections for dst_nodes
   REQUIRE(find(first_node_begin, first_node_end, second_node) != first_node_end);
   // No connections
   REQUIRE(find(first_node_begin, first_node_end, first_node) == first_node_end);
   REQUIRE(find(first_node_begin, first_node_end, third_node) == first_node_end);
   REQUIRE(find(first_node_begin, first_node_end, fourth_node) == first_node_end);
 
-  // Connections
+  // Connections for dst_nodes
   REQUIRE(find(second_node_begin, second_node_end, first_node) != second_node_end);
   REQUIRE(find(second_node_begin, second_node_end, third_node) != second_node_end);
   // No connections
   REQUIRE(find(second_node_begin, second_node_end, second_node) == second_node_end);
   REQUIRE(find(second_node_begin, second_node_end, fourth_node) == second_node_end);
 
-  // Connections
+  // Connections for dst_nodes
   REQUIRE(find(third_node_begin, third_node_end, second_node) != third_node_end);
   REQUIRE(find(third_node_begin, third_node_end, fourth_node) != third_node_end);
   // No connections
   REQUIRE(find(third_node_begin, third_node_end, first_node) == third_node_end);
   REQUIRE(find(third_node_begin, third_node_end, third_node) == third_node_end);
 
-  // Connections
+  // Connections for dst_nodes
   REQUIRE(find(fourth_node_begin, fourth_node_end, first_node) != fourth_node_end);
   REQUIRE(find(fourth_node_begin, fourth_node_end, second_node) != fourth_node_end);
   REQUIRE(find(fourth_node_begin, fourth_node_end, third_node) != fourth_node_end);
   // No connections
   REQUIRE(find(fourth_node_begin, fourth_node_end, fourth_node) == fourth_node_end);
+
+  first_node_begin = first_node->src_nodes.begin();
+  first_node_end = first_node->src_nodes.end();
+  second_node_begin = second_node->src_nodes.begin();
+  second_node_end = second_node->src_nodes.end();
+  third_node_begin = third_node->src_nodes.begin();
+  third_node_end = third_node->src_nodes.end();
+  fourth_node_begin = fourth_node->src_nodes.begin();
+  fourth_node_end = fourth_node->src_nodes.end();
+  
+  // Connections for src_nodes
+  REQUIRE(find(first_node_begin, first_node_end, second_node) != first_node_end);
+  REQUIRE(find(first_node_begin, first_node_end, fourth_node) != first_node_end);
+  // No connections
+  REQUIRE(find(first_node_begin, first_node_end, first_node) == first_node_end);
+  REQUIRE(find(first_node_begin, first_node_end, third_node) == first_node_end);
+
+  // Connections for src_nodes
+  REQUIRE(find(second_node_begin, second_node_end, first_node) != second_node_end);
+  REQUIRE(find(second_node_begin, second_node_end, third_node) != second_node_end);
+  REQUIRE(find(second_node_begin, second_node_end, fourth_node) != second_node_end);
+  // No connections
+  REQUIRE(find(second_node_begin, second_node_end, second_node) == second_node_end);
+
+  // Connections for src_nodes
+  REQUIRE(find(third_node_begin, third_node_end, second_node) != third_node_end);
+  REQUIRE(find(third_node_begin, third_node_end, fourth_node) != third_node_end);
+  // No connections
+  REQUIRE(find(third_node_begin, third_node_end, first_node) == third_node_end);
+  REQUIRE(find(third_node_begin, third_node_end, third_node) == third_node_end);
+
+  // Connections for src_nodes
+  REQUIRE(find(fourth_node_begin, fourth_node_end, third_node) != fourth_node_end);
+  // No connections
+  REQUIRE(find(fourth_node_begin, fourth_node_end, first_node) == fourth_node_end);
+  REQUIRE(find(fourth_node_begin, fourth_node_end, second_node) == fourth_node_end);
+  REQUIRE(find(fourth_node_begin, fourth_node_end, fourth_node) == fourth_node_end);
+
 }
 
 TEST_CASE("DFS test on graph") {
@@ -181,33 +219,34 @@ TEST_CASE("DFS test on graph") {
   // run DFS on test_graph starting with the node with ID 1
   // currently prints out 1 1 2 3 0, need to find bug that's printing the starting node twice
   test_graph.DFS(1);
-  vector<bool> visited = test_graph.visited_;
-  for(bool element: visited) {
-    REQUIRE(element == true);
+  int airport_count = test_graph.getNumberAirports();
+  for(int i = 0; i < airport_count; i++) {
+    REQUIRE(test_graph.checkVisited(i) == true);
   }
 }
 
 TEST_CASE("DFS test with full dataset") {
   AirportsData test = AirportsData();
   auto matrix = test.getMatrix();
-  Graph testGraph = Graph(matrix);
-  testGraph.DFS(0);
+  Graph test_graph = Graph(matrix);
+  test_graph.DFS(0);
 
-  vector<bool> visited = testGraph.visited_;
   int nodes_visited = 0;
-  for(bool element: visited) {
-    if(element == true)
+  int airport_count = test_graph.getNumberAirports();
+  for(int i = 0; i < airport_count; i++) {
+    if(test_graph.checkVisited(i) == true)
       nodes_visited++;
   }
-  // REQUIRE(nodes_visited == test.valid_airports_);
+  REQUIRE(nodes_visited == test_graph.getNumberAirports());
 }
 
 TEST_CASE("Dijkstra's Algorithm Test 1") {
   AirportsData test = AirportsData();
-  vector<int> dijkstras_goroka = test.dijkstras(0);
+  int GKA_index = test.getAirportIndex("GKA");
+  vector<int> dijkstras_goroka = test.dijkstras(GKA_index);
 
   // the shortest path between the source and itself is 0
-  REQUIRE(dijkstras_goroka[0] == 0);
+  REQUIRE(dijkstras_goroka[GKA_index] == 0);
 
   // shortest path between GKA and LAE is 1 flight
   int test_lae = test.getAirportIndex("LAE");

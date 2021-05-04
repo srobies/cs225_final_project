@@ -42,6 +42,7 @@ class Graph {
     // vector<int> dijkstras(const int& src_node_ID);
     void DFS(int start_node_ID);
     bool checkVisited(const int node_ID);
+    int getNumberAirports();
 
     class Iterator : std::iterator<std::forward_iterator_tag, Node> {
       public:
