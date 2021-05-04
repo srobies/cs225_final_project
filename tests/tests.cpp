@@ -9,8 +9,9 @@ TEST_CASE("Check for self-loops") {
   AirportsData test = AirportsData();
   // an entry shouldn't have a connection with itself. Unless you're PKN apparently
   auto matrix = test.getMatrix();
+  int PKN_index = test.getAirportIndex("PKN");
   for(size_t i = 0; i < matrix.size(); i++) {
-    if(i != 3090)
+    if(i != (size_t)PKN_index)
       REQUIRE(0 == matrix[i][i]);
   }
 }
@@ -180,6 +181,25 @@ TEST_CASE("DFS test on graph") {
   // run DFS on test_graph starting with the node with ID 1
   // currently prints out 1 1 2 3 0, need to find bug that's printing the starting node twice
   test_graph.DFS(1);
+  vector<bool> visited = test_graph.visited_;
+  for(bool element: visited) {
+    REQUIRE(element == true);
+  }
+}
+
+TEST_CASE("DFS test with full dataset") {
+  AirportsData test = AirportsData();
+  auto matrix = test.getMatrix();
+  Graph testGraph = Graph(matrix);
+  testGraph.DFS(0);
+
+  vector<bool> visited = testGraph.visited_;
+  int nodes_visited = 0;
+  for(bool element: visited) {
+    if(element == true)
+      nodes_visited++;
+  }
+  // REQUIRE(nodes_visited == test.valid_airports_);
 }
 
 TEST_CASE("Dijkstra's Algorithm Test 1") {

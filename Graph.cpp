@@ -80,6 +80,27 @@ Graph::Graph(vector<vector<int> > adjMat) {
             add_edge_(m,n);
         }
     }
+
+    visited_.resize(num_nodes_);
+    fill(visited_.begin(), visited_.end(), false);
+    // for(size_t i = 0; i < adjMat.size(); i++) {
+    //   size_t count = 0;
+    //   for(size_t j = 0; j < adjMat.size(); j++) {
+    //     if(adjMat[i][j] == 0)
+    //       count++;
+    //   }
+    //   if(count == adjMat[i].size())
+    //     visited_[i] = true;
+    // }
+    // for(size_t i = 0; i < adjMat.size(); i++) {
+    //   size_t count = 0;
+    //   for(size_t j = 0; j < adjMat.size(); j++) {
+    //     if(adjMat[j][i] == 0)
+    //       count++;
+    //   }
+    //   if(count == adjMat[i].size())
+    //     visited_[i] = true;
+    // }
 }
 
 /**
@@ -110,7 +131,8 @@ Node* Graph::get_node_ptr(const int &node_ID) {
  */
  void Graph::DFS(int start_node_ID) {
   for (auto it = Graph::Iterator(this, start_node_ID); it != Graph::Iterator(); ++it) {
-    std::cout << (*it)->ID << std::endl;
+    // std::cout << (*it)->ID << std::endl;
+    visited_[(*it)->ID] = true;
   }
 }
 
