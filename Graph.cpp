@@ -32,7 +32,7 @@ Graph::Graph(const Graph& other) : num_edges_(other.num_edges_),
     for(Node* i: other.nodes_) {
       Node* copiedNode = new Node(i->index);
       copiedNode->index = i->index;
-      copiedNode->neighbors = i->neighbors;
+      copiedNode->dest_nodes = i->dest_nodes;
       nodes_.push_back(copiedNode);
     }
 }
@@ -56,7 +56,7 @@ Graph& Graph::operator=(const Graph& other) {
     for(Node* i: other.nodes_) {
       Node* newNode = new Node(i->index);
       newNode->index = i->index;
-      newNode->neighbors = i->neighbors;
+      newNode->dest_nodes = i->dest_nodes;
       nodes_.push_back(newNode);
     }
   }
@@ -81,26 +81,8 @@ Graph::Graph(vector<vector<int> > adjMat) {
         }
     }
 
-    visited_.resize(num_nodes_);
-    fill(visited_.begin(), visited_.end(), false);
-    // for(size_t i = 0; i < adjMat.size(); i++) {
-    //   size_t count = 0;
-    //   for(size_t j = 0; j < adjMat.size(); j++) {
-    //     if(adjMat[i][j] == 0)
-    //       count++;
-    //   }
-    //   if(count == adjMat[i].size())
-    //     visited_[i] = true;
-    // }
-    // for(size_t i = 0; i < adjMat.size(); i++) {
-    //   size_t count = 0;
-    //   for(size_t j = 0; j < adjMat.size(); j++) {
-    //     if(adjMat[j][i] == 0)
-    //       count++;
-    //   }
-    //   if(count == adjMat[i].size())
-    //     visited_[i] = true;
-    // }
+    visit.resize(num_nodes_);
+    fill(visit.begin(), visit.end(), false);
 }
 
 /**
@@ -131,8 +113,7 @@ Node* Graph::get_node_ptr(const int &node_ID) {
  */
  void Graph::DFS(int start_node_ID) {
   for (auto it = Graph::Iterator(this, start_node_ID); it != Graph::Iterator(); ++it) {
-    // std::cout << (*it)->ID << std::endl;
-    visited_[(*it)->ID] = true;
+    visit[(*it)->ID] = true;
   }
 }
 
@@ -153,9 +134,12 @@ Graph::Iterator::Iterator(Graph* graph, int startID) {
   // NOTE: This is a mildly hacky way of doing it but the easiest off the top
   // of my head
   auto currentNode = graph_->get_node_ptr(startID);
-  auto neighbor = currentNode->neighbors;
-  for(size_t i = 0; i < neighbor.size(); i++) {
-    stack_.push(neighbor[i]->ID);
+  auto neighbor = currentNode->dest_nodes;
+  // for(size_t i = 0; i < neighbor.size(); i++) {
+  //   stack_.push(neighbor[i]->ID);
+  // }
+  for(auto it = neighbor.begin(); it != neighbor.end(); ++it) {
+    stack_.push((*it)->ID);
   }
   startID_ = startID;
   currentNodeID_ = startID;
@@ -178,15 +162,35 @@ Graph::Iterator & Graph::Iterator::operator++() {
   visited_[s] = true;
 
   Node* cur_node = graph_->get_node_ptr(s);
-  std::vector<Node*> adjacent = cur_node->neighbors;
+  // std::vector<Node*> adjacent = cur_node->dest_nodes;
+  // std::vector<Node*> destinations = cur_node->dest_nodes;
+  // std::vector<Node*> sources = cur_node->src_nodes;
+  std::set<Node*> destinations = cur_node->dest_nodes;
+  std::set<Node*> sources = cur_node->src_nodes;
 
-  for (Node* n: adjacent) {
+  // Push adjacent nodes
+  for (Node* n: destinations) {
     if (!visited_[n->ID]) {
       stack_.push(n->ID);
     }
   }
-  if(stack_.empty()) // If the stack is empty, there's no more nodes to traverse
-    finished_ = true;
+  for (Node* n: sources) {
+    if (!visited_[n->ID]) {
+      stack_.push(n->ID);
+    }
+  }
+
+  if(stack_.empty()) {
+    if(find(visited_.begin(), visited_.end(), false) != visited_.end()) { // visited unconnected nodes
+      for(size_t i = 0; i < visited_.size(); i++) {
+        if(visited_[i] == false)
+          stack_.push(i);
+      }
+    }
+    else { // if all nodes visited, finished
+      finished_ = true;
+    }
+  }
 
   return *this;
 }
@@ -273,10 +277,19 @@ void Graph::add_edge_(const int& src_node_ID, const int& dst_node_ID) {
     //     num_edges_ += 1;
     //     z->neighbors.push_back(v);
     // }
-    if(std::find(src_node->neighbors.begin(), src_node->neighbors.end(), dst_node) == src_node->neighbors.end()) {
+    // if(std::find(src_node->dest_nodes.begin(), src_node->dest_nodes.end(), dst_node) == src_node->dest_nodes.end()) {
+    //   if(std::find(dst_node->src_nodes.begin(), dst_node->src_nodes.end(), src_node) == dst_node->dest_nodes.end()) {
+    //     num_edges_ += 1;
+    //     src_node->dest_nodes.insert(dst_node);
+    //     dst_node->src_nodes.insert(src_node);
+    //   }
+    // }
+    size_t src_size = src_node->dest_nodes.size();
+    size_t dst_size = dst_node->src_nodes.size();
+    src_node->dest_nodes.insert(dst_node);
+    dst_node->src_nodes.insert(src_node);
+    if(src_size != src_node->dest_nodes.size() || dst_size != dst_node->src_nodes.size())
       num_edges_ += 1;
-      src_node->neighbors.push_back(dst_node);
-    }
 }
 
 /**
