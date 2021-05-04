@@ -41,7 +41,7 @@ class Graph {
     Node* get_node_ptr(const int& node_ID);
     // vector<int> dijkstras(const int& src_node_ID);
     void DFS(int start_node_ID);
-    vector<bool> visit;
+    bool checkVisited(const int node_ID);
 
     class Iterator : std::iterator<std::forward_iterator_tag, Node> {
       public:
@@ -72,4 +72,5 @@ class Graph {
     int num_edges_ = 0;
     int num_nodes_ = 0;
     vector<struct Node*> nodes_;
+    vector<bool> visitCheck;
 };

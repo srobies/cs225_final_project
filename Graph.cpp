@@ -33,6 +33,7 @@ Graph::Graph(const Graph& other) : num_edges_(other.num_edges_),
       Node* copiedNode = new Node(i->index);
       copiedNode->index = i->index;
       copiedNode->dest_nodes = i->dest_nodes;
+      copiedNode->src_nodes = i->src_nodes;
       nodes_.push_back(copiedNode);
     }
 }
@@ -57,6 +58,7 @@ Graph& Graph::operator=(const Graph& other) {
       Node* newNode = new Node(i->index);
       newNode->index = i->index;
       newNode->dest_nodes = i->dest_nodes;
+      newNode->src_nodes = i->dest_nodes;
       nodes_.push_back(newNode);
     }
   }
@@ -81,8 +83,8 @@ Graph::Graph(vector<vector<int> > adjMat) {
         }
     }
 
-    visit.resize(num_nodes_);
-    fill(visit.begin(), visit.end(), false);
+    visitCheck.resize(num_nodes_);
+    fill(visitCheck.begin(), visitCheck.end(), false);
 }
 
 /**
@@ -108,12 +110,23 @@ Node* Graph::get_node_ptr(const int &node_ID) {
 }
 
 /**
+ * Check if a node has been visited
+ * @param node_ID which node to check if visited
+ */
+bool Graph::checkVisited(const int node_ID) {
+  if(node_ID > -1 && (size_t)node_ID < visitCheck.size())
+    return visitCheck[node_ID];
+  else 
+    return false;
+}
+
+/**
  * Performs an iterative Depth First Search
  * @param start_node_ID initial starting node ID
  */
  void Graph::DFS(int start_node_ID) {
   for (auto it = Graph::Iterator(this, start_node_ID); it != Graph::Iterator(); ++it) {
-    visit[(*it)->ID] = true;
+    visitCheck[(*it)->ID] = true;
   }
 }
 
@@ -134,13 +147,16 @@ Graph::Iterator::Iterator(Graph* graph, int startID) {
   // NOTE: This is a mildly hacky way of doing it but the easiest off the top
   // of my head
   auto currentNode = graph_->get_node_ptr(startID);
-  auto neighbor = currentNode->dest_nodes;
-  // for(size_t i = 0; i < neighbor.size(); i++) {
-  //   stack_.push(neighbor[i]->ID);
-  // }
-  for(auto it = neighbor.begin(); it != neighbor.end(); ++it) {
+  auto destinations = currentNode->dest_nodes;
+  auto sources = currentNode->src_nodes;
+
+  for(auto it = destinations.begin(); it != destinations.end(); ++it) {
     stack_.push((*it)->ID);
   }
+  for(auto it = sources.begin(); it != sources.end(); ++it) {
+    stack_.push((*it)->ID);
+  }
+
   startID_ = startID;
   currentNodeID_ = startID;
   visited_ = vector<bool>(graph->num_nodes_, false);
@@ -162,9 +178,6 @@ Graph::Iterator & Graph::Iterator::operator++() {
   visited_[s] = true;
 
   Node* cur_node = graph_->get_node_ptr(s);
-  // std::vector<Node*> adjacent = cur_node->dest_nodes;
-  // std::vector<Node*> destinations = cur_node->dest_nodes;
-  // std::vector<Node*> sources = cur_node->src_nodes;
   std::set<Node*> destinations = cur_node->dest_nodes;
   std::set<Node*> sources = cur_node->src_nodes;
 
@@ -272,18 +285,6 @@ void Graph::add_edge_(const int& src_node_ID, const int& dst_node_ID) {
     //it isn't it adds it and increases the number of edges by 1.
     Node* dst_node = nodes_[find_node_of_ID_(dst_node_ID)];
     Node* src_node = nodes_[find_node_of_ID_(src_node_ID)];
-    // TODO: double check this comparison
-    // if (std::none_of(z->neighbors.begin(), z->neighbors.end(), [](Node* v){ return i == v; })) {
-    //     num_edges_ += 1;
-    //     z->neighbors.push_back(v);
-    // }
-    // if(std::find(src_node->dest_nodes.begin(), src_node->dest_nodes.end(), dst_node) == src_node->dest_nodes.end()) {
-    //   if(std::find(dst_node->src_nodes.begin(), dst_node->src_nodes.end(), src_node) == dst_node->dest_nodes.end()) {
-    //     num_edges_ += 1;
-    //     src_node->dest_nodes.insert(dst_node);
-    //     dst_node->src_nodes.insert(src_node);
-    //   }
-    // }
     size_t src_size = src_node->dest_nodes.size();
     size_t dst_size = dst_node->src_nodes.size();
     src_node->dest_nodes.insert(dst_node);
