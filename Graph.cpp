@@ -32,7 +32,8 @@ Graph::Graph(const Graph& other) : num_edges_(other.num_edges_),
     for(Node* i: other.nodes_) {
       Node* copiedNode = new Node(i->index);
       copiedNode->index = i->index;
-      copiedNode->neighbors = i->neighbors;
+      copiedNode->dest_nodes = i->dest_nodes;
+      copiedNode->src_nodes = i->src_nodes;
       nodes_.push_back(copiedNode);
     }
 }
@@ -56,7 +57,8 @@ Graph& Graph::operator=(const Graph& other) {
     for(Node* i: other.nodes_) {
       Node* newNode = new Node(i->index);
       newNode->index = i->index;
-      newNode->neighbors = i->neighbors;
+      newNode->dest_nodes = i->dest_nodes;
+      newNode->src_nodes = i->dest_nodes;
       nodes_.push_back(newNode);
     }
   }
@@ -80,6 +82,9 @@ Graph::Graph(vector<vector<int> > adjMat) {
             add_edge_(m,n);
         }
     }
+
+    visitCheck.resize(num_nodes_);
+    fill(visitCheck.begin(), visitCheck.end(), false);
 }
 
 /**
@@ -107,6 +112,40 @@ int Graph::get_num_edges() {
 }
 
 /**
+ * Deletes the edge between two nodes
+ * @param src_node_ID the ID of the source node of the edge
+ * @param dst_node_ID the ID of the destination node of the edge
+ */
+void del_edge_(const int& src_node_ID, const int& dst_node_ID) {
+  //NOTE I have no idea if this works. -matt
+  Node* src;
+  for (i : nodes_) {
+    if (i->ID == src_node_ID) {
+      src = i;
+    }
+  }
+  for (j : src->dest_nodes) {
+    if (j->ID == src->ID) {
+      src->dest_nodes.erase(j);
+    }
+  }
+}
+
+/**
+ * Girvan newman algorithm
+ */
+void GirvanNewman() {
+  /**
+   * Here are the steps we will need
+   * 1. For all i and j (nodes), calculate the shortest path between i and j.
+   * Every time an edge appears on a shortest path, increment its "betweenness"
+   * value by 1
+   * Delete the edges with the highest betweenness, creating a new graph
+   * repeat the steps on this new graph
+   */
+}
+
+/**
  * Check if the node has been created
  * @param node_ID the index of the airport in the adjacency matrix
  */
@@ -119,12 +158,29 @@ Node* Graph::get_node_ptr(const int &node_ID) {
 }
 
 /**
+ * Return the number of airports("nodes") in the graph
+ */
+int Graph::getNumberAirports() {
+  return num_nodes_;
+}
+/**
+ * Check if a node has been visited
+ * @param node_ID which node to check if visited
+ */
+bool Graph::checkVisited(const int node_ID) {
+  if(node_ID > -1 && (size_t)node_ID < visitCheck.size())
+    return visitCheck[node_ID];
+  else 
+    return false;
+}
+
+/**
  * Performs an iterative Depth First Search
  * @param start_node_ID initial starting node ID
  */
  void Graph::DFS(int start_node_ID) {
   for (auto it = Graph::Iterator(this, start_node_ID); it != Graph::Iterator(); ++it) {
-    std::cout << (*it)->ID << std::endl;
+    visitCheck[(*it)->ID] = true;
   }
 }
 
@@ -141,11 +197,25 @@ Graph::Iterator::Iterator() {
 */
 Graph::Iterator::Iterator(Graph* graph, int startID) {
   graph_ = graph;
+  // Add neighbors of start node to stack
+  // NOTE: This is a mildly hacky way of doing it but the easiest off the top
+  // of my head
+  auto currentNode = graph_->get_node_ptr(startID);
+  auto destinations = currentNode->dest_nodes;
+  auto sources = currentNode->src_nodes;
+
+  for(auto it = destinations.begin(); it != destinations.end(); ++it) {
+    stack_.push((*it)->ID);
+  }
+  for(auto it = sources.begin(); it != sources.end(); ++it) {
+    stack_.push((*it)->ID);
+  }
+
   startID_ = startID;
   currentNodeID_ = startID;
-  stack_.push(startID_);
   visited_ = vector<bool>(graph->num_nodes_, false);
   finished_ = false;
+  visited_[startID] = true;
 }
 
 Graph::Iterator & Graph::Iterator::operator++() {
@@ -162,15 +232,32 @@ Graph::Iterator & Graph::Iterator::operator++() {
   visited_[s] = true;
 
   Node* cur_node = graph_->get_node_ptr(s);
-  std::vector<Node*> adjacent = cur_node->neighbors;
+  std::set<Node*> destinations = cur_node->dest_nodes;
+  std::set<Node*> sources = cur_node->src_nodes;
 
-  for (Node* n: adjacent) {
+  // Push adjacent nodes
+  for (Node* n: destinations) {
     if (!visited_[n->ID]) {
       stack_.push(n->ID);
     }
   }
-  if(stack_.empty()) // If the stack is empty, there's no more nodes to traverse
-    finished_ = true;
+  for (Node* n: sources) {
+    if (!visited_[n->ID]) {
+      stack_.push(n->ID);
+    }
+  }
+
+  if(stack_.empty()) {
+    if(find(visited_.begin(), visited_.end(), false) != visited_.end()) { // visited unconnected nodes
+      for(size_t i = 0; i < visited_.size(); i++) {
+        if(visited_[i] == false)
+          stack_.push(i);
+      }
+    }
+    else { // if all nodes visited, finished
+      finished_ = true;
+    }
+  }
 
   return *this;
 }
@@ -252,15 +339,12 @@ void Graph::add_edge_(const int& src_node_ID, const int& dst_node_ID) {
     //it isn't it adds it and increases the number of edges by 1.
     Node* dst_node = nodes_[find_node_of_ID_(dst_node_ID)];
     Node* src_node = nodes_[find_node_of_ID_(src_node_ID)];
-    // TODO: double check this comparison
-    // if (std::none_of(z->neighbors.begin(), z->neighbors.end(), [](Node* v){ return i == v; })) {
-    //     num_edges_ += 1;
-    //     z->neighbors.push_back(v);
-    // }
-    if(std::find(src_node->neighbors.begin(), src_node->neighbors.end(), dst_node) == src_node->neighbors.end()) {
+    size_t src_size = src_node->dest_nodes.size();
+    size_t dst_size = dst_node->src_nodes.size();
+    src_node->dest_nodes.insert(dst_node);
+    dst_node->src_nodes.insert(src_node);
+    if(src_size != src_node->dest_nodes.size() || dst_size != dst_node->src_nodes.size())
       num_edges_ += 1;
-      src_node->neighbors.push_back(dst_node);
-    }
 }
 
 /**

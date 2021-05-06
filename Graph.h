@@ -9,13 +9,15 @@
 #include <iterator>
 #include <string>
 #include <stack>
+#include <set>
 
 using namespace std;
 
 struct Node {
     //node variables
     int ID; // row index in adjacency matrix. Can be used to identify node
-    vector<struct Node*> neighbors; // marks outgoing flights as neighbors
+    set<struct Node*> dest_nodes; // marks outgoing flights as neighbors
+    set<struct Node*> src_nodes; // mark incoming flights as neighbors
     // incoming flights not marked
     int index; // index in nodes_ private variable
 
@@ -41,6 +43,9 @@ class Graph {
     int get_num_edges();
     // vector<int> dijkstras(const int& src_node_ID);
     void DFS(int start_node_ID);
+    bool checkVisited(const int node_ID);
+    int getNumberAirports();
+    void GirvanNewman();
 
     class Iterator : std::iterator<std::forward_iterator_tag, Node> {
       public:
@@ -63,6 +68,7 @@ class Graph {
   private:
     void add_edge_(const int& src_node_ID, const int& dst_node_ID);
     void add_node_(const int& node_ID);
+    void del_edge_(const int& src_node_ID, const int& dst_node_ID);
     bool contains_node_(const int& ID);
     bool check_node_exists_(const int& ID);
     int find_node_of_index_(const int& node_index);
@@ -71,4 +77,5 @@ class Graph {
     int num_edges_ = 0;
     int num_nodes_ = 0;
     vector<struct Node*> nodes_;
+    vector<bool> visitCheck;
 };

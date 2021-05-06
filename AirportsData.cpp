@@ -1,10 +1,12 @@
-#include <list>
+#include <iterator>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <climits>
+#include <set>
 
 #include "AirportsData.h"
 
@@ -19,7 +21,8 @@ AirportsData::AirportsData() {
   file_airports.open("data/airports.csv");
   string line_airports;
   // stores number of lines
-  int line_num = 0;
+  // int line_num = 0;
+  set<string> airport_codes; // Set of all airport codes from airports.csv
   while (getline(file_airports,line_airports)) {
     vector<string> result;
     stringstream stream(line_airports);
@@ -31,29 +34,25 @@ AirportsData::AirportsData() {
     string code = result[4]; // using 3 letter IATA codes
     string name = result[1];
     // throw entries out if code or name are null
-    if(code.find("\\N") == string::npos && name.find("\\N") == string::npos) {
+    if(code.find("\\N") == string::npos && name.find("\\N") == string::npos && code.size() == 5) {
     // Need to handle quotes from data file
       code = code.substr(1, code.size()-2);
       name = name.substr(1, name.size()-2);
-      airport_index_.insert(pair<string, int>(code,line_num));
+      // airport_index_.insert(pair<string, int>(code,line_num));
       airport_names_.insert(pair<string, string>(code,name));
-      line_num++;
+      airport_codes.insert(code);
+      // airports.insert(code);
+      // line_num++;
     }
   }
   file_airports.close();
 
-  // at this point, line_num is one bigger than what it should be
-  // line_num -= 1;
-
-  // construct adjacency matrix but do not fill yet
-  vector<vector<int> > vec(line_num, vector<int>(line_num, 0));
-
-  // store matrix of 0s in adjacency_matrix_
-  adjacency_matrix_ = vec;
-
   ifstream file_routes;
   file_routes.open("data/routes.csv");
   string line_routes;
+
+  map<string, set<string>> routes;
+  set<string> sources_and_destinations;
   while (getline(file_routes,line_routes)) {
     vector<string> result;
     stringstream stream(line_routes);
@@ -64,12 +63,40 @@ AirportsData::AirportsData() {
     }
     string start = result[2]; // using 3 letter IATA codes
     string end = result[4];
-    int index_start = getAirportIndex(start);
-    int index_end = getAirportIndex(end);
-    if(index_start == -1 || index_end == -1) { continue; }
-    adjacency_matrix_[index_start][index_end] = 1;
+    sources_and_destinations.insert(start);
+    sources_and_destinations.insert(end);
+    routes[start].insert(end);
   }
   file_routes.close();
+
+
+  set<string> route_intersection; // Find the intersection of airports between routes.csv and airports.csv
+  set_intersection(sources_and_destinations.begin(), sources_and_destinations.end(),
+    airport_codes.begin(), airport_codes.end(), inserter(route_intersection, route_intersection.begin()));
+  // Only use codes that are both in routes.csv and airports.csv for adjacency matrix
+
+  int index = 0;
+  for(auto it = route_intersection.begin(); it != route_intersection.end(); ++it) {
+    airport_index_.insert(pair<string, int>(*it,index));
+    index++;
+  }
+  // construct adjacency matrix but do not fill yet
+  vector<vector<int> > vec(route_intersection.size(), vector<int>(route_intersection.size(), 0));
+
+  // store matrix of 0s in adjacency_matrix_
+  adjacency_matrix_ = vec;
+  for(auto startAirport = route_intersection.begin(); startAirport != route_intersection.end(); ++startAirport) { // each airport in intersection dataset
+    int index_start = getAirportIndex(*startAirport);
+    // cout << "start airport: " << *startAirport << endl;
+    if(routes.find(*startAirport) != routes.end()) {
+      for(auto endAirport = routes.find(*startAirport)->second.begin(); endAirport != routes.find(*startAirport)->second.end(); ++endAirport) { // each airport route
+        int index_end = getAirportIndex(*endAirport);
+        // cout << "end airport: " << *endAirport << endl;
+        if(index_start != -1 && index_end != -1)
+          adjacency_matrix_[index_start][index_end] = 1;
+      }
+    }
+  }
 }
 
 std::vector< std::vector<int> > AirportsData::getMatrix() {
