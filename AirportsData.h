@@ -24,7 +24,7 @@ public:
   std::string getAirportName(std::string airport_code);
   int getAirportIndex(std::string airport_code);
   string getAirportCode(int airport_idx);
-  bool hasFlightBetween(std::string airport_src, std::string airport_dest);
+  bool hasFlightBetween(int airport_src, int airport_dest);
   int numIncomingFlights(std::string airport_code);
   int numOutgoingFlights(std::string airport_code);
   vector<pair<int,int>> dijkstras(int source_idx);
