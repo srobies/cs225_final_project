@@ -113,6 +113,13 @@ TEST_CASE("Graph test with a small adjacency matrix") {
   auto fourth_node_begin = fourth_node->dest_nodes.begin();
   auto fourth_node_end = fourth_node->dest_nodes.end();
 
+  const int numNodes = test_graph.get_num_nodes();
+  const int numEdges = test_graph.get_num_edges();
+
+  //Number of nodes and edges
+  REQUIRE(numNodes == 4);
+  REQUIRE(numEdges == 8);
+  // Connections
   // Connections for dst_nodes
   REQUIRE(find(first_node_begin, first_node_end, second_node) != first_node_end);
   // No connections
@@ -179,6 +186,10 @@ TEST_CASE("Graph test with a small adjacency matrix") {
   REQUIRE(find(fourth_node_begin, fourth_node_end, fourth_node) == fourth_node_end);
 
 }
+
+
+
+
 
 TEST_CASE("DFS test on graph") {
   /*
