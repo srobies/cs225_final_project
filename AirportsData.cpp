@@ -253,7 +253,7 @@ vector<pair<int,int>> AirportsData::dijkstras(int source_idx) {
       // if airport not in predecessor set
       if (!predecessor[i]) {
         // check if there is flight from previous to next in adjacency matrix
-        if (adjacency_matrix_[min][i] == 1) {
+        if (hasFlightBetween(min, i)  == true) {
           // make sure distance isnt maximum distance
           if (dist_to_source[min].first != INT_MAX) {
             // check adding new distance is less than distance to this one
