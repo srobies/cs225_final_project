@@ -52,16 +52,23 @@ TEST_CASE("Verify that getAirportIndex returns airport index given airport code"
 TEST_CASE("Verify that hasFlightBetween correctly returns whether there is a flight from the source to the destination.") {
   // first airport in airports.csv
   AirportsData test = AirportsData();
-  bool connected1 = test.hasFlightBetween("AER", "KZN");
+  int AER_index = test.getAirportIndex("AER");
+  int KZN_index = test.getAirportIndex("KZN");
+  bool connected1 = test.hasFlightBetween(AER_index, KZN_index);
   REQUIRE(true == connected1);
 
-  bool connected2 = test.hasFlightBetween("LAX", "YYZ");
+  int LAX_index = test.getAirportIndex("LAX");
+  int YYZ_index = test.getAirportIndex("YYZ");
+  bool connected2 = test.hasFlightBetween(LAX_index, YYZ_index);
   REQUIRE(true == connected2);
 
-  bool connected3 = test.hasFlightBetween("TSA", "TTT");
+  int TSA_index = test.getAirportIndex("TSA");
+  int TTT_index = test.getAirportIndex("TTT");
+  bool connected3 = test.hasFlightBetween(TSA_index, TTT_index);
   REQUIRE(true == connected3);
 
-  bool connected4 = test.hasFlightBetween("ORD", "TTT");
+  int ORD_index = test.getAirportIndex("ORD");
+  bool connected4 = test.hasFlightBetween(ORD_index, TTT_index);
   REQUIRE(false == connected4);
 }
 
