@@ -249,7 +249,6 @@ vector<pair<int,int>> AirportsData::dijkstras(int source_idx) {
         }
       }
     }
-  
     int min = min_index;
 
     // This airport is no longer false in predecessors vector
