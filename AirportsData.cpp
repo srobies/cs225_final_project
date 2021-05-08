@@ -20,8 +20,6 @@ AirportsData::AirportsData() {
   ifstream file_airports;
   file_airports.open("data/airports.csv");
   string line_airports;
-  // stores number of lines
-  // int line_num = 0;
   set<string> airport_codes; // Set of all airport codes from airports.csv
   while (getline(file_airports,line_airports)) {
     vector<string> result;
@@ -38,11 +36,8 @@ AirportsData::AirportsData() {
     // Need to handle quotes from data file
       code = code.substr(1, code.size()-2);
       name = name.substr(1, name.size()-2);
-      // airport_index_.insert(pair<string, int>(code,line_num));
       airport_names_.insert(pair<string, string>(code,name));
       airport_codes.insert(code);
-      // airports.insert(code);
-      // line_num++;
     }
   }
   file_airports.close();
@@ -220,9 +215,8 @@ vector<pair<int,int>> AirportsData::dijkstras(int source_idx) {
 
   // create vector to store distance to each node.
   // First index is distance. Second index is parent. If no parent, then at source node
-  // vector<vector<int>> dist_to_source(size_airports, vector<int>(1, INT_MAX));
   vector<pair<int,int>> dist_to_source(size_airports, pair<int,int>(INT_MAX, -1));
-  // pair<int, int>(distance form source, parent node)
+  // pair<int, int>(distance from source, parent node)
 
   // create predecessor vector. Set all predecessors to NULL
   vector<bool> predecessor(size_airports, false);
@@ -275,10 +269,4 @@ vector<pair<int,int>> AirportsData::dijkstras(int source_idx) {
     }
   }
   return dist_to_source;
-}
-
-// delete edges for use in Girvan-Newman
-void AirportsData::delete_edge_(const int& src_index, const int& dest_index) {
-  adjacency_matrix_[src_index][dest_index] = 0;
-  adjacency_matrix_[dest_index][src_index] = 0;
 }

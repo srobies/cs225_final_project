@@ -28,12 +28,9 @@ public:
   int numIncomingFlights(std::string airport_code);
   int numOutgoingFlights(std::string airport_code);
   vector<pair<int,int>> dijkstras(int source_idx);
-  int minFlightDistance(const vector<pair<int,int>>& dts, const vector<bool>& pred);
   friend class Graph; // allow Graph class to access data of AirportsData
 
 private:
-  // delete edges for Girvan Newman
-  void delete_edge_(const int& src_index, const int& dest_index);
   // adjacency matrix for storing connections between airports
   std::vector<std::vector<int> > adjacency_matrix_;
 
