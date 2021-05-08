@@ -117,20 +117,30 @@ int Graph::get_num_edges() {
  * @param src_node_ID the ID of the source node of the edge
  * @param dst_node_ID the ID of the destination node of the edge
  */
-// void del_edge_(const int& src_node_ID, const int& dst_node_ID) {
-//   //NOTE I have no idea if this works. -matt
-//   Node* src;
-//   for (i : nodes_) {
-//     if (i->ID == src_node_ID) {
-//       src = i;
-//     }
-//   }
-//   for (j : src->dest_nodes) {
-//     if (j->ID == src->ID) {
-//       src->dest_nodes.erase(j);
-//     }
-//   }
-// }
+void Graph::del_edge_(const int& src_node_ID, const int& dst_node_ID) {
+  //NOTE I have no idea if this works. -matt
+  Node* src;
+  Node* dest;
+  for (auto i : nodes_) {
+    if (i->ID == src_node_ID) {
+      src = i;
+    }
+    else if(i->ID == dst_node_ID) {
+      dest = i;
+    }
+  }
+  for (auto j : src->dest_nodes) {
+    if (j->ID == dest->ID) {
+      src->dest_nodes.erase(j);
+    }
+  }
+  for(auto j: dest->src_nodes) {
+    if(j->ID == src->ID) {
+      dest->src_nodes.erase(j);
+    }
+  }
+  num_edges_ -= 1;
+}
 
 /**
  * Girvan newman algorithm
