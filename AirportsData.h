@@ -32,6 +32,8 @@ public:
   friend class Graph; // allow Graph class to access data of AirportsData
 
 private:
+  // delete edges for Girvan Newman
+  void delete_edge_(const int& src_index, const int& dest_index);
   // adjacency matrix for storing connections between airports
   std::vector<std::vector<int> > adjacency_matrix_;
 

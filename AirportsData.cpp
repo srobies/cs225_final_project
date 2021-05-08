@@ -293,3 +293,9 @@ int AirportsData::minFlightDistance(const vector<pair<int,int>>& dts, const vect
   }
   return min_index;
 }
+
+// delete edges for use in Girvan-Newman
+void AirportsData::delete_edge_(const int& src_index, const int& dest_index) {
+  adjacency_matrix_[src_index][dest_index] = 0;
+  adjacency_matrix_[dest_index][src_index] = 0;
+}
