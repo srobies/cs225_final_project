@@ -247,13 +247,12 @@ vector<pair<int,int>> AirportsData::dijkstras(int source_idx) {
     // pick minimum from airports not included
     int min = minFlightDistance(dist_to_source, predecessor);
 
-    // Mark this airport as having shortest distance updated
+    // This airport is no longer false in predecessors vector
     predecessor[min] = true;
 
-    // Update distance value of the adjacent airports to chosen airport
+    // Update distance of the adjacent airports to chosen airport
     for (int i = 0; i < size_airports; i++) {
-      // if airport not in predecessor set, and there is a connection,
-      // total distance is distance to previous airport plus distance to new one
+      // if airport not in predecessor set
       if (!predecessor[i]) {
         // check if there is flight from previous to next in adjacency matrix
         if (adjacency_matrix_[min][i] == 1) {
