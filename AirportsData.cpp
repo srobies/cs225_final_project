@@ -233,7 +233,24 @@ vector<pair<int,int>> AirportsData::dijkstras(int source_idx) {
   // find shortest path for all vertices
   for (int count = 0; count < size_airports; count++) {
     // pick minimum from airports not included
-    int min = minFlightDistance(dist_to_source, predecessor);
+    // initialize a minimum
+    int _min = INT_MAX;
+    int min_index = -50;
+
+    int size_airports = adjacency_matrix_[0].size();
+
+    for (int i = 0; i < size_airports; i++) {
+    // if the airport is not already connected
+      if (predecessor[i] == false) {
+        // if the distance is less than or equal to the min
+        if (dist_to_source[i].first <= _min) {
+          _min = dist_to_source[i].first;
+          min_index = i;
+        }
+      }
+    }
+  
+    int min = min_index;
 
     // This airport is no longer false in predecessors vector
     predecessor[min] = true;
@@ -259,26 +276,6 @@ vector<pair<int,int>> AirportsData::dijkstras(int source_idx) {
     }
   }
   return dist_to_source;
-}
-
-int AirportsData::minFlightDistance(const vector<pair<int,int>>& dts, const vector<bool>& pred) {
-  // initialize a minimum
-  int min = INT_MAX;
-  int min_index = -50;
-
-  int size_airports = adjacency_matrix_[0].size();
-
-  for (int i = 0; i < size_airports; i++) {
-    // if the airport is not already connected
-    if (pred[i] == false) {
-      // if the distance is less than or equal to the min
-      if (dts[i].first <= min) {
-        min = dts[i].first;
-        min_index = i;
-      }
-    }
-  }
-  return min_index;
 }
 
 // delete edges for use in Girvan-Newman
