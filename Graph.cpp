@@ -1,3 +1,4 @@
+#include <climits>
 #include <iostream>
 #include <map>
 #include <vector>
@@ -58,7 +59,7 @@ Graph& Graph::operator=(const Graph& other) {
       Node* newNode = new Node(i->index);
       newNode->index = i->index;
       newNode->dest_nodes = i->dest_nodes;
-      newNode->src_nodes = i->dest_nodes;
+      newNode->src_nodes = i->src_nodes;
       nodes_.push_back(newNode);
     }
   }
@@ -95,6 +96,54 @@ Graph::~Graph() {
     delete i;
   }
   nodes_.shrink_to_fit();
+}
+
+/**
+ * Returns the number of nodes in the graph
+ */
+int Graph::get_num_nodes() {
+  return num_nodes_;
+}
+
+/**
+ * Returns the number of edges in the graph
+ */
+int Graph::get_num_edges() {
+  return num_edges_;
+}
+
+/**
+ * Deletes the edge between two nodes
+ * @param src_node_ID the ID of the source node of the edge
+ * @param dst_node_ID the ID of the destination node of the edge
+ */
+// void del_edge_(const int& src_node_ID, const int& dst_node_ID) {
+//   //NOTE I have no idea if this works. -matt
+//   Node* src;
+//   for (i : nodes_) {
+//     if (i->ID == src_node_ID) {
+//       src = i;
+//     }
+//   }
+//   for (j : src->dest_nodes) {
+//     if (j->ID == src->ID) {
+//       src->dest_nodes.erase(j);
+//     }
+//   }
+// }
+
+/**
+ * Girvan newman algorithm
+ */
+void GirvanNewman() {
+  /**
+   * Here are the steps we will need
+   * 1. For all i and j (nodes), calculate the shortest path between i and j.
+   * Every time an edge appears on a shortest path, increment its "betweenness"
+   * value by 1
+   * Delete the edges with the highest betweenness, creating a new graph
+   * repeat the steps on this new graph
+   */
 }
 
 /**
@@ -298,30 +347,3 @@ void Graph::add_edge_(const int& src_node_ID, const int& dst_node_ID) {
     if(src_size != src_node->dest_nodes.size() || dst_size != dst_node->src_nodes.size())
       num_edges_ += 1;
 }
-
-/**
- * Dijkstra's Algorithm
- * @param node_ID the ID of the node that is the source
-vector<int> Graph::dijkstras(const int& source_node_ID) {
-  // the number of nodes in the graph
-  int num_nodes = (int) nodes_.size();
-
-  // index of source
-  int source_idx = source_node_ID;
-
-  // create vector to store distance to each node
-  vector<int> dist_to_source(num_nodes);
-
-  // distance from source node to source node is 0
-  dist_to_source[source_idx] = 0;
-
-  // set all other distances to "infinity"
-  for (int i = 0; i < (int) dist_to_source.size(); i++) {
-    if (i != source_idx) {
-      dist_to_source[i] = 100000000;
-    }
-  }
-
-  return dist_to_source;
-}
-*/
