@@ -214,25 +214,28 @@ int AirportsData::numOutgoingFlights(std::string airport_code) {
  * Dijkstra's Algorithm
  * @param source_idx the index of the node that is the source
  */
-vector<int> AirportsData::dijkstras(int source_idx) {
+vector<pair<int,int>> AirportsData::dijkstras(int source_idx) {
   // the number of airports in the graph
   int size_airports = adjacency_matrix_[0].size();
 
-  // create vector to store distance to each node. Set all distances to "infinity"
-  vector<int> dist_to_source(size_airports, INT_MAX);
+  // create vector to store distance to each node.
+  // First index is distance. Second index is parent. If no parent, then at source node
+  // vector<vector<int>> dist_to_source(size_airports, vector<int>(1, INT_MAX));
+  vector<pair<int,int>> dist_to_source(size_airports, pair<int,int>(INT_MAX, -1));
+  // pair<int, int>(distance form source, parent node)
 
   // create predecessor vector. Set all predecessors to NULL
   vector<bool> predecessor(size_airports, false);
 
-  // distance from source node to source node is 0
-  dist_to_source[source_idx] = 0;
-
   // set all other distances to "infinity"
   // for (int i = 0; i < size_airports; i++) {
   //   if (i != source_idx) {
-  //     dist_to_source[i] = INT_MAX;
+  //     dist_to_source[i][0] = INT_MAX;
   //   }
   // }
+
+  // distance from source node to source node is 0
+  dist_to_source[source_idx].first = 0;
 
   // set all predecessors to NULL
   // for (int i = 0; i < size_airports; i++) {
@@ -240,7 +243,7 @@ vector<int> AirportsData::dijkstras(int source_idx) {
   // }
 
   // find shortest path for all vertices
-  for (int count = 0; count < size_airports - 1; count++) {
+  for (int count = 0; count < size_airports; count++) {
     // pick minimum from airports not included
     int min = minFlightDistance(dist_to_source, predecessor);
 
@@ -255,11 +258,13 @@ vector<int> AirportsData::dijkstras(int source_idx) {
         // check if there is flight from previous to next in adjacency matrix
         if (adjacency_matrix_[min][i] == 1) {
           // make sure distance isnt maximum distance
-          if (dist_to_source[min] != INT_MAX) {
+          if (dist_to_source[min].first != INT_MAX) {
             // check adding new distance is less than distance to this one
-            if ((dist_to_source[min] + adjacency_matrix_[min][i]) < dist_to_source[i]) {
+            if ((dist_to_source[min].first + adjacency_matrix_[min][i]) < dist_to_source[i].first) {
               // add 1 flight to the distance
-              dist_to_source[i] = dist_to_source[min] + 1;
+              dist_to_source[i].first = dist_to_source[min].first + 1;
+              // add the parent node
+              dist_to_source[i].second = min;
             }
           }
         }
@@ -269,7 +274,7 @@ vector<int> AirportsData::dijkstras(int source_idx) {
   return dist_to_source;
 }
 
-int AirportsData::minFlightDistance(const vector<int>& dts, const vector<bool>& pred) {
+int AirportsData::minFlightDistance(const vector<pair<int,int>>& dts, const vector<bool>& pred) {
   // initialize a minimum
   int min = INT_MAX;
   int min_index = -50;
@@ -280,8 +285,8 @@ int AirportsData::minFlightDistance(const vector<int>& dts, const vector<bool>& 
     // if the airport is not already connected
     if (pred[i] == false) {
       // if the distance is less than or equal to the min
-      if (dts[i] <= min) {
-        min = dts[i];
+      if (dts[i].first <= min) {
+        min = dts[i].first;
         min_index = i;
       }
     }
