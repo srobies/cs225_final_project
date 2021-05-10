@@ -194,10 +194,6 @@ TEST_CASE("Graph test with a small adjacency matrix") {
 
 }
 
-
-
-
-
 TEST_CASE("DFS test on graph") {
   /*
    * [0, 1, 0, 0]
