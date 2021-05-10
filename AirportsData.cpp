@@ -82,11 +82,9 @@ AirportsData::AirportsData() {
   adjacency_matrix_ = vec;
   for(auto startAirport = route_intersection.begin(); startAirport != route_intersection.end(); ++startAirport) { // each airport in intersection dataset
     int index_start = getAirportIndex(*startAirport);
-    // cout << "start airport: " << *startAirport << endl;
     if(routes.find(*startAirport) != routes.end()) {
       for(auto endAirport = routes.find(*startAirport)->second.begin(); endAirport != routes.find(*startAirport)->second.end(); ++endAirport) { // each airport route
         int index_end = getAirportIndex(*endAirport);
-        // cout << "end airport: " << *endAirport << endl;
         if(index_start != -1 && index_end != -1)
           adjacency_matrix_[index_start][index_end] = 1;
       }
@@ -216,7 +214,6 @@ vector<pair<int,int>> AirportsData::dijkstras(int source_idx) {
   // create vector to store distance to each node.
   // First index is distance. Second index is parent. If no parent, then at source node
   vector<pair<int,int>> dist_to_source(size_airports, pair<int,int>(INT_MAX, -1));
-  // pair<int, int>(distance from source, parent node)
 
   // create predecessor vector. Set all predecessors to NULL
   vector<bool> predecessor(size_airports, false);
