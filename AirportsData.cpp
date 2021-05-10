@@ -224,35 +224,18 @@ vector<pair<int,int>> AirportsData::dijkstras(int source_idx) {
   // find shortest path for all vertices
   for (int count = 0; count < size_airports; count++) {
     // pick minimum from airports not included
-    // initialize a minimum
-    int _min = INT_MAX;
-    int min_index = -50;
+    int min = minFlightDistance(dist_to_source, predecessor);
 
-    int size_airports = adjacency_matrix_[0].size();
-
-    for (int i = 0; i < size_airports; i++) {
-    // if the airport is not already connected
-      if (predecessor[i] == false) {
-        // if the distance is less than or equal to the min
-        if (dist_to_source[i].first <= _min) {
-          _min = dist_to_source[i].first;
-          min_index = i;
-        }
-      }
-    }
-    int min = min_index;
-
-    // This airport is no longer false in predecessors vector
+    // Mark this airport as having shortest distance updated
     predecessor[min] = true;
 
-    // Update distance of the adjacent airports to chosen airport
+    // Update distance value of the adjacent airports to chosen airport
     for (int i = 0; i < size_airports; i++) {
-      // if airport not in predecessor set
+      // if airport not in predecessor set, and there is a connection,
+      // total distance is distance to previous airport plus distance to new one
       if (!predecessor[i]) {
         // check if there is flight from previous to next in adjacency matrix
-        string minCode = getAirportCode(min);
-        string iCode = getAirportCode(i);
-        if (hasFlightBetween(minCode, iCode)  == true) {
+        if (adjacency_matrix_[min][i] == 1) {
           // make sure distance isnt maximum distance
           if (dist_to_source[min].first != INT_MAX) {
             // check adding new distance is less than distance to this one
@@ -268,4 +251,24 @@ vector<pair<int,int>> AirportsData::dijkstras(int source_idx) {
     }
   }
   return dist_to_source;
+}
+
+int AirportsData::minFlightDistance(const vector<pair<int,int>>& dts, const vector<bool>& pred) {
+  // initialize a minimum
+  int min = INT_MAX;
+  int min_index = -50;
+
+  int size_airports = adjacency_matrix_[0].size();
+
+  for (int i = 0; i < size_airports; i++) {
+    // if the airport is not already connected
+    if (pred[i] == false) {
+      // if the distance is less than or equal to the min
+      if (dts[i].first <= min) {
+        min = dts[i].first;
+        min_index = i;
+      }
+    }
+  }
+  return min_index;
 }
