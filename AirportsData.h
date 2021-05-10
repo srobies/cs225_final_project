@@ -18,7 +18,7 @@ using namespace std;
  */
 class AirportsData {
 public:
-  AirportsData();
+  AirportsData(string airportData, string routeData);
   std::vector< std::vector<int> > getMatrix();
   std::map<std::string, std::string> getMap();
   std::string getAirportName(std::string airport_code);
@@ -27,6 +27,7 @@ public:
   bool hasFlightBetween(string airport_src, string airport_dest);
   int numIncomingFlights(std::string airport_code);
   int numOutgoingFlights(std::string airport_code);
+  int minFlightDistance(const vector<pair<int,int>>& dts, const vector<bool>& pred);
   vector<pair<int,int>> dijkstras(int source_idx);
   friend class Graph; // allow Graph class to access data of AirportsData
 

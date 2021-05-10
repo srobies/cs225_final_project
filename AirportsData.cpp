@@ -15,10 +15,10 @@ using namespace std;
 /**
  * Constructs a new adjacency matrix and map to hold airport data.
  */
-AirportsData::AirportsData() {
+AirportsData::AirportsData(string airportData, string routeData) {
   // maps each airport code to an index & map each airport code to airport name
   ifstream file_airports;
-  file_airports.open("data/airports.csv");
+  file_airports.open(airportData);
   string line_airports;
   set<string> airport_codes; // Set of all airport codes from airports.csv
   while (getline(file_airports,line_airports)) {
@@ -43,7 +43,7 @@ AirportsData::AirportsData() {
   file_airports.close();
 
   ifstream file_routes;
-  file_routes.open("data/routes.csv");
+  file_routes.open(routeData);
   string line_routes;
 
   map<string, set<string>> routes;
@@ -214,6 +214,7 @@ vector<pair<int,int>> AirportsData::dijkstras(int source_idx) {
   // create vector to store distance to each node.
   // First index is distance. Second index is parent. If no parent, then at source node
   vector<pair<int,int>> dist_to_source(size_airports, pair<int,int>(INT_MAX, -1));
+  // pair<int, int>(distance form source, parent node)
 
   // create predecessor vector. Set all predecessors to NULL
   vector<bool> predecessor(size_airports, false);
