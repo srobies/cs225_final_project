@@ -145,7 +145,7 @@ void Graph::del_edge_(const int& src_node_ID, const int& dst_node_ID) {
 /**
  * Girvan newman algorithm
  */
-void GirvanNewman() {
+vector<string> GirvanNewman() {
   /**
    * Here are the steps we will need
    * 1. For all i and j (nodes), calculate the shortest path between i and j.
@@ -154,6 +154,45 @@ void GirvanNewman() {
    * Delete the edges with the highest betweenness, creating a new graph
    * repeat the steps on this new graph
    */
+
+  //create airports data object called ap
+  AirportsData ap = AirportsData();
+  //creates a vector of ints to hold the betweenness values for the nodes
+  vector<int> v(nodes_.size()) bcNodes;
+  //vector of pairs for the return type of dijkstras
+  vector<pair<int, int>> distances;
+  //iterates for every node in the graph
+  for (Node* v: nodes_) {
+    //setting dijkstras return vector
+    distances = ap.dijkstras(v->ID);
+    //loop through all the values in distances
+    for (pair<int,int> s : distances) {
+      if (s.second != NULL) {
+        //everytime a node appears increment its value
+        bcNodes[s.second] += 1;
+      }
+    }
+  }
+  //the vector of airport codes that is to be returned
+  vector<string> toRet;
+  //loop through nodes_.size() times
+  for (int j = 0; j < nodes_.size(); j++) {
+    //intialize these variables to 0
+    int largestValue = 0;
+    int index = 0;
+    //find the largest value and records that value and its index
+    for (int k = 0; k < nodes_.size(); k++) {
+      if (bcNodes[k] > largestValue) {
+        largestValue = bcNodes[k];
+        index = k;
+      }
+    }
+    //sets the largest existing value to zero so we can find the next largest
+    bcNodes[index] = 0;
+    //adds the airports codes to toRet in order of highest betweenness to lowest
+    toRet[j] = ap.getAirportCode(bcNodes[index]);
+  }
+  return toRet;
 }
 
 /**

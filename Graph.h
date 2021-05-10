@@ -44,7 +44,7 @@ class Graph {
     void DFS(int start_node_ID);
     bool checkVisited(const int node_ID);
     int getNumberAirports();
-    void GirvanNewman();
+    vector<string> GirvanNewman();
 
     class Iterator : std::iterator<std::forward_iterator_tag, Node> {
       public:
