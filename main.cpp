@@ -1,22 +1,50 @@
+#include <fstream>
 #include <iostream>
+#include <string>
+#include <climits>
 #include "AirportsData.h"
 #include "Graph.h"
 
-int main() {
-  AirportsData test;
-  auto matrix = test.getMatrix();
-  Graph testGraph(matrix);
-  testGraph.DFS(0);
-  // cout << 
-  int not_visited = 0;
-  for(size_t i = 0; i < matrix.size(); i++) {
-    if(testGraph.visited_[i] == false) {
-      // std::cout << i <<": " << test.getAirportCode(i) << std::endl;
-      not_visited++;
-      cout << i << " " << test.getAirportCode(i) << endl;
+int main(int argc, char* argv[]) {
+  // Format for cmdline to run
+  if(argc != 5) {
+    cout << "Please input the correct number of arguments" << endl;
+    return 0;
+  }
+  // ./main airports_csv routes_csv dijkstra_startpoint output_file
+  AirportsData inputData(argv[1], argv[2]);
+  auto matrix = inputData.getMatrix();
+  Graph outputGraph(matrix);
+  auto visitOrder = outputGraph.DFS(0);
+
+  // Write to an output file
+  // ofstream outputFile;
+  // outputFile.open(argv[4]);
+  // Print the dfs output
+  for(size_t i = 0; i < visitOrder.size(); i++) {
+    cout << "Airport with ID: " << visitOrder[i] << " and code: "
+      << inputData.getAirportCode(visitOrder[i]) << " visited\n";
+  }
+  // outputFile << "\n";
+
+  // Print an example Dijkstra's
+  int index = stoi(argv[3]);
+  auto dijkstra = inputData.dijkstras(index);
+  for(size_t i = 0; i < dijkstra.size(); i++) {
+    if(dijkstra[i].first == INT_MAX) {
+    cout << "There is no path from " << inputData.getAirportCode(index)
+      << " to " << inputData.getAirportCode(i) << endl;
+    }
+    else {
+    cout << "The shortest path from " << inputData.getAirportCode(index)
+      << " to " << inputData.getAirportCode(i) << " is " << dijkstra[i].first << endl;
     }
   }
-  cout << testGraph.visited_.size() << endl;
-  cout << not_visited << endl;
+
+  auto centrality = outputGraph.GirvanNewman(inputData);
+  for(size_t i = 0; i < centrality.size(); i++) {
+    cout << "The airport with importance " << i << " has code " << centrality[i] << endl;
+  }
+  // outputFile.close();
   return 0;
 }

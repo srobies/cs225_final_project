@@ -4,6 +4,7 @@
  */
 #pragma once
 
+#include "AirportsData.h"
 #include <iostream>
 #include <vector>
 #include <iterator>
@@ -41,10 +42,10 @@ class Graph {
     Node* get_node_ptr(const int& node_ID);
     int get_num_nodes();
     int get_num_edges();
-    void DFS(int start_node_ID);
+    vector<int> DFS(int start_node_ID);
     bool checkVisited(const int node_ID);
     int getNumberAirports();
-    vector<string> GirvanNewman();
+    vector<string> GirvanNewman(AirportsData& ap);
 
     class Iterator : std::iterator<std::forward_iterator_tag, Node> {
       public:

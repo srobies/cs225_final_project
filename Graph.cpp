@@ -141,7 +141,7 @@ void Graph::del_edge_(const int& src_node_ID, const int& dst_node_ID) {
 /**
  * Girvan newman algorithm
  */
-vector<string> GirvanNewman() {
+vector<string> Graph::GirvanNewman(AirportsData& ap) {
   /**
    * Here are the steps we will need
    * 1. For all i and j (nodes), calculate the shortest path between i and j.
@@ -151,33 +151,34 @@ vector<string> GirvanNewman() {
    * repeat the steps on this new graph
    */
 
-  //create airports data object called ap
-  AirportsData ap = AirportsData();
   //creates a vector of ints to hold the betweenness values for the nodes
-  vector<int> v(nodes_.size()) bcNodes;
+  vector<int> bcNodes(nodes_.size(),0);
   //vector of pairs for the return type of dijkstras
   vector<pair<int, int>> distances;
   //iterates for every node in the graph
+  int i = 0;
   for (Node* v: nodes_) {
     //setting dijkstras return vector
     distances = ap.dijkstras(v->ID);
     //loop through all the values in distances
     for (pair<int,int> s : distances) {
-      if (s.second != NULL) {
+      if (s.second != -1) {
         //everytime a node appears increment its value
         bcNodes[s.second] += 1;
       }
     }
+    cout << "nodes done: " << i << endl;
+    i++;
   }
   //the vector of airport codes that is to be returned
   vector<string> toRet;
   //loop through nodes_.size() times
-  for (int j = 0; j < nodes_.size(); j++) {
+  for (size_t j = 0; j < bcNodes.size(); j++) {
     //intialize these variables to 0
     int largestValue = 0;
     int index = 0;
     //find the largest value and records that value and its index
-    for (int k = 0; k < nodes_.size(); k++) {
+    for (size_t k = 0; k < bcNodes.size(); k++) {
       if (bcNodes[k] > largestValue) {
         largestValue = bcNodes[k];
         index = k;
@@ -186,7 +187,7 @@ vector<string> GirvanNewman() {
     //sets the largest existing value to zero so we can find the next largest
     bcNodes[index] = 0;
     //adds the airports codes to toRet in order of highest betweenness to lowest
-    toRet[j] = ap.getAirportCode(bcNodes[index]);
+    toRet.push_back(ap.getAirportCode(index));
   }
   return toRet;
 }
@@ -224,10 +225,13 @@ bool Graph::checkVisited(const int node_ID) {
  * Performs an iterative Depth First Search
  * @param start_node_ID initial starting node ID
  */
- void Graph::DFS(int start_node_ID) {
+vector<int> Graph::DFS(int start_node_ID) {
+  vector<int> visitOrder;
   for (auto it = Graph::Iterator(this, start_node_ID); it != Graph::Iterator(); ++it) {
     visitCheck[(*it)->ID] = true;
+    visitOrder.push_back((*it)->ID);
   }
+  return visitOrder;
 }
 
 /**
