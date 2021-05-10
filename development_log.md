@@ -26,3 +26,7 @@ For this meeting, Shayna Provine took notes. The leader for this meeting was Mat
 
 **May 4, 2021:**
 For this meeting, Matthew took notes. The leader for this meeting was Shayna. DFS is finished, Spencer fixed the node issue and is smoothing out the bugs. Matt started Gervan-Newman on his machine, but still has some work to do before committing anything. Spencer plans on re-implementing Djikstra’s to work off the graph. Our plan is to finish GN asap so we can work on the project this weekend. Our plan is to meet again on May 8th, this coming saturday, at 11am.
+
+**May 8, 2021:**
+For this meeting, Rachel Dannhausen-Brun took notes. The leader for this meeting was Spencer Robieson. We first completed any necessary finalizations to the three algorithms. We then all worked together on the presentation as well as the final project report. We decided who would record audio for which slides and how much of the time would be spent on each slide. It was also determined that each member of the group would upload their audio to a shared drive. Rachel would then add both the audio and the presentation slides to an iMovie project in order to create the final presentation.
+
