@@ -8,21 +8,18 @@
 #include "Graph.h"
 #include "AirportsData.h"
 
-
 using namespace std;
-
 
 /**
  * Class implementation of a graph. Creates a Graph class object
  * with a map of connect airports and routes.
  */
 
-//Defaults Constructor
+// Default Constructor
 Graph::Graph() {
     num_edges_ = 0;
     num_nodes_ = 0;
 }
-
 
 /**
  * Copy constructor
@@ -44,7 +41,7 @@ Graph::Graph(const Graph& other) : num_edges_(other.num_edges_),
  * @param other graph to be copied
  */
 Graph& Graph::operator=(const Graph& other) {
-  // TODO: check this. no self assignment
+  // no self assignment
   if(this != &other) {
     // clear out lhs
     for(Node* i: nodes_) {
@@ -71,21 +68,20 @@ Graph& Graph::operator=(const Graph& other) {
  * @param adjMat the adjacency matrix to be processed
  */
 Graph::Graph(vector<vector<int> > adjMat) {
-    //creates nodes
-    for (size_t i = 0; i < adjMat.size(); i++) {
-        add_node_(i);
-    }
+  //creates nodes
+  for (size_t i = 0; i < adjMat.size(); i++) {
+    add_node_(i);
+  }
 
-    //adds edges
-    for (size_t m = 0; m < adjMat.size(); m++) {
-        for (size_t n = 0; n < adjMat[m].size(); n++) {
-          if(adjMat[m][n] == 1) // only add edge if there is a route
-            add_edge_(m,n);
-        }
+  //adds edges
+  for (size_t m = 0; m < adjMat.size(); m++) {
+    for (size_t n = 0; n < adjMat[m].size(); n++) {
+      if(adjMat[m][n] == 1) // only add edge if there is a route
+        add_edge_(m,n);
     }
-
-    visitCheck.resize(num_nodes_);
-    fill(visitCheck.begin(), visitCheck.end(), false);
+  }
+  visitCheck.resize(num_nodes_);
+  fill(visitCheck.begin(), visitCheck.end(), false);
 }
 
 /**
@@ -248,8 +244,6 @@ Graph::Iterator::Iterator() {
 Graph::Iterator::Iterator(Graph* graph, int startID) {
   graph_ = graph;
   // Add neighbors of start node to stack
-  // NOTE: This is a mildly hacky way of doing it but the easiest off the top
-  // of my head
   auto currentNode = graph_->get_node_ptr(startID);
   auto destinations = currentNode->dest_nodes;
   auto sources = currentNode->src_nodes;
@@ -353,12 +347,12 @@ void Graph::add_node_(const int& node_ID) {
  * @param node_ID the ID of the node you are looking for
  */
 int Graph::find_node_of_ID_(const int& node_ID) {
-    int i = 0;
-    for (Node* v: nodes_) {
-        if(v->ID == node_ID) return i;
-        i += 1;
-    }
-    throw runtime_error {"Could not find node"};
+  int i = 0;
+  for (Node* v: nodes_) {
+    if(v->ID == node_ID) return i;
+      i += 1;
+  }
+  throw runtime_error {"Could not find node"};
 }
 
 /**
@@ -367,12 +361,12 @@ int Graph::find_node_of_ID_(const int& node_ID) {
  * @param node_ID the ID of the node you are looking for
  */
 int Graph::find_node_of_index_(const int& node_idx) {
-    int i = 0;
-    for (Node* v: nodes_) {
-        if(v->index == node_idx) return i;
-        i += 1;
-    }
-    throw runtime_error {"Could not find node"};
+  int i = 0;
+  for (Node* v: nodes_) {
+    if(v->index == node_idx) return i;
+      i += 1;
+  }
+  throw runtime_error {"Could not find node"};
 }
 
 /**
@@ -381,18 +375,18 @@ int Graph::find_node_of_index_(const int& node_idx) {
  * @param dst_node_ID the ID of the tip end node of the edge
  */
 void Graph::add_edge_(const int& src_node_ID, const int& dst_node_ID) {
-    //Check if nodes exist
-    if (!check_node_exists_(src_node_ID)) throw runtime_error {"Source node does not exist"};
-    if (!check_node_exists_(dst_node_ID)) throw runtime_error {"Destination node does not exist"};
+  //Check if nodes exist
+  if (!check_node_exists_(src_node_ID)) throw runtime_error {"Source node does not exist"};
+  if (!check_node_exists_(dst_node_ID)) throw runtime_error {"Destination node does not exist"};
 
-    //Checks if the destination node is already included in the neighbors list, if
-    //it isn't it adds it and increases the number of edges by 1.
-    Node* dst_node = nodes_[find_node_of_ID_(dst_node_ID)];
-    Node* src_node = nodes_[find_node_of_ID_(src_node_ID)];
-    size_t src_size = src_node->dest_nodes.size();
-    size_t dst_size = dst_node->src_nodes.size();
-    src_node->dest_nodes.insert(dst_node);
-    dst_node->src_nodes.insert(src_node);
-    if(src_size != src_node->dest_nodes.size() || dst_size != dst_node->src_nodes.size())
-      num_edges_ += 1;
+  //Checks if the destination node is already included in the neighbors list, if
+  //it isn't it adds it and increases the number of edges by 1.
+  Node* dst_node = nodes_[find_node_of_ID_(dst_node_ID)];
+  Node* src_node = nodes_[find_node_of_ID_(src_node_ID)];
+  size_t src_size = src_node->dest_nodes.size();
+  size_t dst_size = dst_node->src_nodes.size();
+  src_node->dest_nodes.insert(dst_node);
+  dst_node->src_nodes.insert(src_node);
+  if(src_size != src_node->dest_nodes.size() || dst_size != dst_node->src_nodes.size())
+    num_edges_ += 1;
 }
