@@ -6,7 +6,7 @@
 using namespace std;
 
 TEST_CASE("Check for self-loops") {
-  AirportsData test = AirportsData();
+  AirportsData test = AirportsData("data/airports.csv", "data/routes.csv");
   // an entry shouldn't have a connection with itself. Unless you're PKN apparently
   auto matrix = test.getMatrix();
   int PKN_index = test.getAirportIndex("PKN");
@@ -17,7 +17,7 @@ TEST_CASE("Check for self-loops") {
 }
 
 TEST_CASE("Verify that getAirportName returns airport name given airport code") {
-  AirportsData test = AirportsData();
+  AirportsData test = AirportsData("data/airports.csv", "data/routes.csv");
   std::string name = test.getAirportName("GKA");
   REQUIRE("Goroka Airport" == name);
 
@@ -34,7 +34,7 @@ TEST_CASE("Verify that getAirportName returns airport name given airport code") 
 
 TEST_CASE("Verify that getAirportIndex returns airport index given airport code") {
   // Airports are inserted in alphabetical order
-  AirportsData test = AirportsData();
+  AirportsData test = AirportsData("data/airports.csv", "data/routes.csv");
   int AAE_index = test.getAirportIndex("AAE");
   REQUIRE(0 == AAE_index);
 
@@ -51,7 +51,7 @@ TEST_CASE("Verify that getAirportIndex returns airport index given airport code"
 
 TEST_CASE("Verify that hasFlightBetween correctly returns whether there is a flight from the source to the destination.") {
   // first airport in airports.csv
-  AirportsData test = AirportsData();
+  AirportsData test = AirportsData("data/airports.csv", "data/routes.csv");
   int AER_index = test.getAirportIndex("AER");
   int KZN_index = test.getAirportIndex("KZN");
   bool connected1 = test.hasFlightBetween("AER", "KZN");
@@ -240,7 +240,7 @@ TEST_CASE("DFS test on graph") {
 }
 
 TEST_CASE("DFS test with full dataset") {
-  AirportsData test = AirportsData();
+  AirportsData test = AirportsData("data/airports.csv", "data/routes.csv");
   auto matrix = test.getMatrix();
   Graph test_graph = Graph(matrix);
   test_graph.DFS(0);
@@ -255,7 +255,7 @@ TEST_CASE("DFS test with full dataset") {
 }
 
 TEST_CASE("Dijkstra's Algorithm Test 1") {
-  AirportsData test = AirportsData();
+  AirportsData test = AirportsData("data/airports.csv", "data/routes.csv");
   int GKA_index = test.getAirportIndex("GKA");
   vector<pair<int,int>> dijkstras_goroka = test.dijkstras(GKA_index);
 
@@ -272,7 +272,7 @@ TEST_CASE("Dijkstra's Algorithm Test 1") {
 }
 
 TEST_CASE("Dijkstra's Algorithm Test 2") {
-  AirportsData test = AirportsData();
+  AirportsData test = AirportsData("data/airports.csv", "data/routes.csv");
   int ohare_idx = test.getAirportIndex("ORD");
   vector<pair<int,int>> dijkstras_ohare = test.dijkstras(ohare_idx);
 
@@ -289,7 +289,7 @@ TEST_CASE("Dijkstra's Algorithm Test 2") {
 }
 
 TEST_CASE("Dijkstra's Algorithm Test 3") {
-  AirportsData test = AirportsData();
+  AirportsData test = AirportsData("data/airports.csv", "data/routes.csv");
   int champaign_idx = test.getAirportIndex("CMI");
   vector<pair<int,int>> dijkstras_champaign = test.dijkstras(champaign_idx);
 
