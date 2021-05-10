@@ -38,6 +38,5 @@ private:
   std::map<std::string, int> airport_index_;
 
   // map storing airport codes and their names
-  // map<airport_code, airport_name>
   std::map<std::string, std::string> airport_names_;
 };
