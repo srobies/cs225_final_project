@@ -156,7 +156,6 @@ vector<string> Graph::GirvanNewman(AirportsData& ap) {
   //vector of pairs for the return type of dijkstras
   vector<pair<int, int>> distances;
   //iterates for every node in the graph
-  int i = 0;
   for (Node* v: nodes_) {
     //setting dijkstras return vector
     distances = ap.dijkstras(v->ID);
@@ -167,11 +166,10 @@ vector<string> Graph::GirvanNewman(AirportsData& ap) {
         bcNodes[s.second] += 1;
       }
     }
-    cout << "nodes done: " << i << endl;
-    i++;
   }
   //the vector of airport codes that is to be returned
   vector<string> toRet;
+  // vector<bool> visited(bcNodes.size(), false);
   //loop through nodes_.size() times
   for (size_t j = 0; j < bcNodes.size(); j++) {
     //intialize these variables to 0
@@ -179,10 +177,16 @@ vector<string> Graph::GirvanNewman(AirportsData& ap) {
     int index = 0;
     //find the largest value and records that value and its index
     for (size_t k = 0; k < bcNodes.size(); k++) {
-      if (bcNodes[k] > largestValue) {
-        largestValue = bcNodes[k];
-        index = k;
-      }
+      // if (index == 0 || bcNodes[k] >= largestValue) {
+      //   if(visited[k] == false) {
+      //     largestValue = bcNodes[k];
+      //     index = k;
+      //     visited[k] = true;
+      //   }
+      // }
+      auto max_value = max_element(bcNodes.begin(), bcNodes.end());
+      index = max_value - bcNodes.begin();
+      largestValue = *max_value;
     }
     //sets the largest existing value to zero so we can find the next largest
     bcNodes[index] = 0;
