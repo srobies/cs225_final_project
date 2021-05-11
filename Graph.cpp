@@ -147,8 +147,6 @@ vector<string> Graph::GirvanNewman(AirportsData& ap) {
    * 1. For all i and j (nodes), calculate the shortest path between i and j.
    * Every time an edge appears on a shortest path, increment its "betweenness"
    * value by 1
-   * Delete the edges with the highest betweenness, creating a new graph
-   * repeat the steps on this new graph
    */
 
   //creates a vector of ints to hold the betweenness values for the nodes
@@ -188,8 +186,8 @@ vector<string> Graph::GirvanNewman(AirportsData& ap) {
       index = max_value - bcNodes.begin();
       largestValue = *max_value;
     }
-    //sets the largest existing value to zero so we can find the next largest
-    bcNodes[index] = 0;
+    //sets the largest existing value to -1 so we can find the next largest
+    bcNodes[index] = -1;
     //adds the airports codes to toRet in order of highest betweenness to lowest
     toRet.push_back(ap.getAirportCode(index));
   }
