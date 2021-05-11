@@ -37,7 +37,8 @@ int main(int argc, char* argv[]) {
     }
     else {
     outputFile << "The shortest path from " << inputData.getAirportCode(index)
-      << " to " << inputData.getAirportCode(i) << " is " << dijkstra[i].first << endl;
+      << " to " << inputData.getAirportCode(i) << " is " << dijkstra[i].first 
+      << " flights" << endl;
     }
   }
   outputFile << "\n";

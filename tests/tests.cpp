@@ -1,3 +1,4 @@
+#include <climits>
 #include <cstddef>
 #include <string>
 #include <vector>
@@ -311,12 +312,12 @@ TEST_CASE("Dijkstra's Algorithm Test 3") {
 }
 
 TEST_CASE("Betweenness centrality test") {
+  // AAA has no outgoing routes, BBB has 2, CCC has 2, DDD has 3. Should be in order DDD, BBB, CCC, AAA
   AirportsData test = AirportsData("data/testairports.csv", "data/testroutes.csv");
   auto matrix = test.getMatrix();
   Graph testGraph = Graph(matrix);
 
   auto testBetweenness = testGraph.GirvanNewman(test);
-  cout << testBetweenness.size() << endl;
   REQUIRE(testBetweenness[0] == "DDD");
   REQUIRE(testBetweenness[1] == "BBB");
   REQUIRE(testBetweenness[2] == "CCC");
