@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <string>
 #include <vector>
 #include "../cs225/catch/catch.hpp"
@@ -307,4 +308,17 @@ TEST_CASE("Dijkstra's Algorithm Test 3") {
   // shortest path between CMI and YYZ is 2 flights
   int test_yyz = test.getAirportIndex("YYZ");
   REQUIRE(dijkstras_champaign[test_yyz].first == 2);
+}
+
+TEST_CASE("Betweenness centrality test") {
+  AirportsData test = AirportsData("data/testairports.csv", "data/testroutes.csv");
+  auto matrix = test.getMatrix();
+  Graph testGraph = Graph(matrix);
+
+  auto testBetweenness = testGraph.GirvanNewman(test);
+  cout << testBetweenness.size() << endl;
+  REQUIRE(testBetweenness[0] == "DDD");
+  REQUIRE(testBetweenness[1] == "BBB");
+  REQUIRE(testBetweenness[2] == "CCC");
+  REQUIRE(testBetweenness[3] == "AAA");
 }
