@@ -175,13 +175,6 @@ vector<string> Graph::GirvanNewman(AirportsData& ap) {
     int index = 0;
     //find the largest value and records that value and its index
     for (size_t k = 0; k < bcNodes.size(); k++) {
-      // if (index == 0 || bcNodes[k] >= largestValue) {
-      //   if(visited[k] == false) {
-      //     largestValue = bcNodes[k];
-      //     index = k;
-      //     visited[k] = true;
-      //   }
-      // }
       auto max_value = max_element(bcNodes.begin(), bcNodes.end());
       index = max_value - bcNodes.begin();
       largestValue = *max_value;
