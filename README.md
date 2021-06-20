@@ -1,4 +1,4 @@
-# racheld3-slr6-mweiler3-provine2
+# UIUC CS225 Final Project
 
 The files containing the two main classes, AirportData.cpp and Graph.cpp, can be found in the main directory of the project. The headers for these two classes and the main.cpp to run the code can also be found in the main project. Our dataset can be found in the folder "data/" under the file names airports.csv and routes.csv. A file containing results can be found in the main folder under the name "results.txt". This run of the code used the Rabah Bitat airport with code AAE for the example Dijkstra's.
 
