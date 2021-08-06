@@ -7,3 +7,5 @@ To build the main executable, type "make" in the main project folder. To build t
 The syntax for the main executable is *./main airport_data_name route_data_name dijkstra_source output_file_name*. Airport_data_name is the path to the airport data, route_data_name is the path to the route data, dijkstra_source is the source node for the example Dijkstra's run, and output_file_name is the name of the file you want to output the run results to. For the run found in results.txt, we used *./main data/airports.csv data/routes.csv 0 results.txt*. 
 
 To run the test suite, simply type *./test*. We wrote tests to ensure the data structure construction was correct. We also wrote tests to ensure that our member functions to check connections between airports could be correctly accessed. Additional tests were written to make sure that the graph and airportData classes interacted correctly. There are also small scale tests for DFS, Dijkstra's and Betweenness centrality. 
+
+The async utilization isn't great. Not sure if there's a way to speed it up.
