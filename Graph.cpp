@@ -1,4 +1,4 @@
-#include <climits>
+#include <future>
 #include <iostream>
 #include <map>
 #include <vector>
@@ -138,25 +138,18 @@ void Graph::del_edge_(const int& src_node_ID, const int& dst_node_ID) {
   num_edges_ -= 1;
 }
 
-/**
- * Girvan newman algorithm
- */
-vector<string> Graph::GirvanNewman(AirportsData& ap) {
-  /**
-   * Here are the steps we will need
-   * 1. For all i and j (nodes), calculate the shortest path between i and j.
-   * Every time an edge appears on a shortest path, increment its "betweenness"
-   * value by 1
-   */
-
-  //creates a vector of ints to hold the betweenness values for the nodes
-  vector<int> bcNodes(nodes_.size(),0);
+pair<vector<pair<int,int>>,vector<int>> Graph::calculateDijkstras(size_t starting_node, size_t ending_node, 
+    AirportsData ap, Graph refGraph) {
+  
   //vector of pairs for the return type of dijkstras
-  vector<pair<int, int>> distances;
+  auto nodes = refGraph.getNodes();
+  vector<pair<int,int>> distances;
+  vector<int> bcNodes(refGraph.get_num_nodes(), 0);
   //iterates for every node in the graph
-  for (Node* v: nodes_) {
+  // for (Node* v: nodes) {
+  for(size_t i = starting_node; i < ending_node; i++) {
     //setting dijkstras return vector
-    distances = ap.dijkstras(v->ID);
+    distances = ap.dijkstras((nodes_[i])->ID);
     //loop through all the values in distances
     for (pair<int,int> s : distances) {
       if (s.second != -1) {
@@ -165,6 +158,38 @@ vector<string> Graph::GirvanNewman(AirportsData& ap) {
       }
     }
   }
+  // return distances;
+  auto returnValue = pair<vector<pair<int,int>>,vector<int>>(distances, bcNodes);
+  return returnValue;
+}
+
+/**
+ * Girvan newman algorithm
+ */
+vector<string> Graph::GirvanNewman(AirportsData& ap, vector<pair<int, int>>& distances, vector<int>& bcNodes) {
+  /**
+   * Here are the steps we will need
+   * 1. For all i and j (nodes), calculate the shortest path between i and j.
+   * Every time an edge appears on a shortest path, increment its "betweenness"
+   * value by 1
+   */
+
+  //creates a vector of ints to hold the betweenness values for the nodes
+  // vector<int> bcNodes(nodes_.size(),0);
+  //vector of pairs for the return type of dijkstras
+  // vector<pair<int, int>> distances;
+  // //iterates for every node in the graph
+  // for (Node* v: nodes_) {
+  //   //setting dijkstras return vector
+  //   distances = ap.dijkstras(v->ID);
+  //   //loop through all the values in distances
+  //   for (pair<int,int> s : distances) {
+  //     if (s.second != -1) {
+  //       //everytime a node appears increment its value
+  //       bcNodes[s.second] += 1;
+  //     }
+  //   }
+  // }
   //the vector of airport codes that is to be returned
   vector<string> toRet;
   // vector<bool> visited(bcNodes.size(), false);
@@ -388,4 +413,8 @@ void Graph::add_edge_(const int& src_node_ID, const int& dst_node_ID) {
   dst_node->src_nodes.insert(src_node);
   if(src_size != src_node->dest_nodes.size() || dst_size != dst_node->src_nodes.size())
     num_edges_ += 1;
+}
+
+vector<struct Node*>& Graph::getNodes() {
+  return nodes_;
 }

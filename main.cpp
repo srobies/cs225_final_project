@@ -1,4 +1,5 @@
 #include <fstream>
+#include <future>
 #include <iostream>
 #include <string>
 #include <climits>
@@ -42,8 +43,51 @@ int main(int argc, char* argv[]) {
     }
   }
   outputFile << "\n";
+  
+  size_t increment = outputGraph.get_num_nodes() / 8;
 
-  auto centrality = outputGraph.GirvanNewman(inputData);
+  // async stuff
+  auto thread1 = std::async(&Graph::calculateDijkstras, &outputGraph, 0, increment,
+      inputData, outputGraph);
+  auto thread2 = std::async(&Graph::calculateDijkstras, &outputGraph, increment, 2*increment,
+      inputData, outputGraph);
+  auto thread3 = std::async(&Graph::calculateDijkstras, &outputGraph, 2*increment, 3*increment,
+      inputData, outputGraph);
+  auto thread4 = std::async(&Graph::calculateDijkstras, &outputGraph, 3*increment, 4*increment,
+      inputData, outputGraph);
+  auto thread5 = std::async(&Graph::calculateDijkstras, &outputGraph, 4*increment, 5*increment,
+      inputData, outputGraph);
+  auto thread6 = std::async(&Graph::calculateDijkstras, &outputGraph, 5*increment, 6*increment,
+      inputData, outputGraph);
+  auto thread7 = std::async(&Graph::calculateDijkstras, &outputGraph, 6*increment, 7*increment,
+      inputData, outputGraph);
+  auto thread8 = std::async(&Graph::calculateDijkstras, &outputGraph, 7*increment, outputGraph.get_num_nodes()-1,
+      inputData, outputGraph);
+
+  thread1.wait();
+  thread2.wait();
+  thread3.wait();
+  thread4.wait();
+
+  auto result1 = thread1.get();
+  auto result2 = thread2.get();
+  auto result3 = thread3.get();
+  auto result4 = thread4.get();
+
+  vector<pair<int, int>> distances;
+  distances.insert(distances.end(), result1.first.begin(), result1.first.end());
+  distances.insert(distances.end(), result2.first.begin(), result2.first.end());
+  distances.insert(distances.end(), result3.first.begin(), result3.first.end());
+  distances.insert(distances.end(), result4.first.begin(), result4.first.end());
+  vector<int> bcNodes(outputGraph.get_num_nodes(), 0);
+  for (size_t i = 0; i < result1.second.size(); i++) {
+    bcNodes[i] += result1.second[i];
+    bcNodes[i] += result2.second[i];
+    bcNodes[i] += result3.second[i];
+    bcNodes[i] += result4.second[i];
+  }
+
+  auto centrality = outputGraph.GirvanNewman(inputData, distances, bcNodes);
   for(size_t i = 0; i < centrality.size(); i++) {
     outputFile << "The airport with importance " << i << " has code " << centrality[i] << endl;
   }

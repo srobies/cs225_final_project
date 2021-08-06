@@ -30,7 +30,7 @@ WARNINGS = -pedantic -Wall -Werror -Wfatal-errors -Wextra -Wno-unused-parameter 
 CXXFLAGS += $(CS225) -std=c++1y -stdlib=libc++ -O0 $(WARNINGS) $(DEPFILE_FLAGS) -g -c
 
 # Flags for linking:
-LDFLAGS += $(CS225) -std=c++1y -stdlib=libc++ -lc++abi
+LDFLAGS += $(CS225) -std=c++1y -stdlib=libc++ -lc++abi -pthread
 
 # Rule for `all` (first/default rule):
 all: $(EXE)

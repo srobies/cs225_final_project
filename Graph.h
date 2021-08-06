@@ -40,12 +40,15 @@ class Graph {
     Graph& operator=(const Graph& other);
     ~Graph();
     Node* get_node_ptr(const int& node_ID);
+    vector<struct Node*>& getNodes();
     int get_num_nodes();
     int get_num_edges();
     vector<int> DFS(int start_node_ID);
     bool checkVisited(const int node_ID);
+    pair<vector<pair<int,int>>,vector<int>> calculateDijkstras(size_t starting_node, size_t ending_node,
+        AirportsData ap, Graph refGraph);
     int getNumberAirports();
-    vector<string> GirvanNewman(AirportsData& ap);
+    vector<string> GirvanNewman(AirportsData& ap, vector<pair<int, int>>& distances, vector<int>& bcNodes);
 
     class Iterator : std::iterator<std::forward_iterator_tag, Node> {
       public:
